@@ -1,0 +1,16 @@
+{
+  "name": "fadymichel/vtc-booking",
+  "description": "Booking System",
+  "license": "proprietary",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "App\\": "App"
+    }
+  },
+  "require": {
+    "phpmailer/phpmailer": "^6.0",
+    "stripe/stripe-php": "^5.6",
+    "twig/twig": "~2.0"
+  }
+}

@@ -1,0 +1,58 @@
+.w3-violet, .w3-hover-violet:hover {
+    color: #fff!important;
+    background-color: #3f4c6b!important;
+}
+/* Create a Parallax Effect */
+.bgimg-1, .bgimg-2, .bgimg-3, .bgimgr-1, .bgimg-4, .bgimg-5 {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+.bgimgr-1 {
+    background-image: url('view/images/paris3.jpg');
+    min-height: 40%;
+}
+
+/* Second image (Portfolio) */
+.bgimg-2 {
+    background-image: url("../images/mercedes.jpg");
+    min-height: 400px;
+}
+
+/* Third image (Contact) */
+.bgimg-3 {
+    background-image: url("/view/images/paris2.jpg");
+    min-height: 400px;
+}
+.bgimg-4 {
+    background-image: url("view/images/gare.jpg");
+    min-height: 400px;
+}
+.bgimg-5 {
+    background-image: url("view/images/airport.jpg");
+    min-height: 400px;
+}
+@media only screen and (max-device-width: 1024px) {
+    .bgimg-1, .bgimg-2, .bgimg-3, .bgimgr-1, .bgimg-4, .bgimg-5 {
+        background-attachment: scroll;
+    }
+}
+/* Adjust the position of the parallax image text */
+.w3-display-middle2 {top:15%}
+.w3-wide {letter-spacing: 10px;}
+
+.w3-hover-opacity {cursor: pointer;}
+.mep-select img {
+    margin-bottom: -20px;
+}
+.paiement img {
+    height: 25px;
+    margin-left: 10px;
+}
+#mapsDevis {
+    width: 100%;
+    height: 400px;
+
+}
