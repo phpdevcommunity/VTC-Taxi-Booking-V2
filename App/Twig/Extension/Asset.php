@@ -8,23 +8,44 @@
 
 namespace App\Twig\Extension;
 
+use App\Config\Config;
 use Twig_Extension;
-use MySettings;
 use Twig_Function;
 
+/**
+ * Class Asset
+ * @package App\Twig\Extension
+ */
 class Asset extends Twig_Extension
 {
 
-    public function getFunctions()
+    /**
+     * @var Config $config
+     */
+    private $config;
+
+    public function __construct()
     {
-        return array(
-            new Twig_Function('asset', array($this, 'asset')),
-        );
+        $this->config = new Config();
     }
 
+    /**
+     * @return array|Twig_Function[]
+     */
+    public function getFunctions()
+    {
+        return [
+            new Twig_Function('asset', [$this, 'asset']),
+        ];
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
     public function asset($path)
     {
-            return MySettings::$_url.MySettings::$_view.$path;
+            return $this->config->baseUrl.$path;
     }
 
 }

@@ -2,182 +2,204 @@
 
 namespace App\Controller;
 
+use App\Form\FinalReservationType;
+use App\Form\StartReservationType;
+use GuzzleHttp\Psr7\Response;
 use App\Model\Reservation;
+use App\Repository\CarRepository;
+use App\Repository\ReservationRepository;
 use App\Service\StripePayment;
-use MySettings;
-use App\Model\Manager\ReservationManager;
-use App\Model\DataBase;
 use App\Service\Email;
-use App\Model\Cars;
 use App\Service\GoogleApi;
 use App\Service\Forfait;
 use App\Model\Address;
 use App\Service\Tarifs;
+use Psr\Http\Message\ServerRequestInterface;
 
 
+/**
+ * Class Controller
+ * @package App\Controller
+ */
 class Controller extends AppController
 {
 
-
-    public function home()
+    /**
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    public function home(ServerRequestInterface $request)
     {
 
-        $this->render('index.html.twig', array());
 
+        $reservationType = new StartReservationType();
+        $reservationType->setAction('reservation/quotation');
+        $form = $reservationType->buildForm();
+
+        return $this->render(
+            'index.html.twig', [
+                'home' => true,
+                'form' => $form
+            ]
+        );
     }
 
     /**
+     * @param ServerRequestInterface $request
      * @param $bookingNumber
+     * @return Response
      */
-    public function booking($bookingNumber)
+    public function booking(ServerRequestInterface $request, $bookingNumber)
     {
 
-        if (ctype_alnum($bookingNumber) && isset($_SESSION[$bookingNumber]) && !empty($_SESSION[$bookingNumber])) {
 
+        if (
+            ctype_alnum($bookingNumber)
+            && isset($_SESSION[$bookingNumber])
+            && !empty($_SESSION[$bookingNumber])
+        ) {
 
-            $data = $_SESSION[$bookingNumber];
+            /**
+             * @var Reservation $reservation
+             */
+            $reservation = $_SESSION[$bookingNumber];
 
-            if (isset($_POST) && !empty($_POST)) {
+            $reservationType = new FinalReservationType();
+            $form = $reservationType->buildForm(['reservation' => $reservation]);
 
+            if ($request->getMethod() == 'POST') {
 
-                $booking = new Reservation($data, $_POST);
-                $check = $booking->checkData();
-                if ($check === true) {
+                $data = $request->getParsedBody();
+                $form->validate($data);
 
+                if ($form->isValid()) {
+                    $reservation->hydrate($form->getData());
+                    $payment = $reservation->getMethodPayment();
 
-                    $method_payment = $booking->getPaiement();
-                    if ($method_payment == 2 && isset($_POST['stripeToken'])) {
+                    $statusPayment = false;
+                    if (
+                        $payment === Reservation::PAYMENT_CARD
+                        && isset($data['stripeToken'])
+                    ) {
 
-                        $token = $_POST['stripeToken'];
+                        $token = $data['stripeToken'];
                         $stripePayment = new StripePayment();
-                        $etatPayment = $stripePayment->payment($token, $booking->getMail(), $booking->getPrix());
+                        $statusPayment = $stripePayment->payment(
+                            $token,
+                            $reservation->getMail(),
+                            $reservation->getPrice()
+                        );
 
-                    } else {
-                        $etatPayment = true;
+                    } elseif ($payment === Reservation::PAYMENT_CASH) {
+                        $statusPayment = true;
                     }
 
-                    if ($etatPayment !== false) {
+                    $reservationRepository = new ReservationRepository();
 
-                        $reservation = new ReservationManager(DataBase::connect());
-                        $reservation->addReservation($booking);
+                    if ($statusPayment === true) {
 
-                        $emailBooking = new Email();
-                        $emailBooking->sendEmailConfirmation($booking);
+                        $reservationRepository->save($reservation);
+
+                        try {
+                            (new Email())->sendConfirmation($reservation);
+                        }catch (\Exception $e) {
+                            $this->addFlash(
+                                'error',
+                                'l\'email de confirmation n\'a pa pu être envoyé.'
+                            );
+                        }
                         unset($_SESSION[$bookingNumber]);
 
                     }
-                   $this->render('confirmation.html.twig',['booking' => $data, 'payment' => $etatPayment, 'method' => $method_payment]);
+                    return $this->render('confirmation.html.twig', [
+                            'reservation' => $reservation,
+                            'payment' => $statusPayment,
+                        ]
+                    );
                 }
-            }
-            else {
-                $this->render('booking.html.twig', ['booking' => $data]);
-            }
 
-        } else {
+            }
+            return $this->render(
+                'booking.html.twig', [
+                    'reservation' => $reservation,
+                    'form' => $form,
+                ]
+            );
 
-            $this->redirectTo('home');
         }
 
+        return $this->redirectTo('/');
     }
 
     /**
-     * @method POST
+     * @param ServerRequestInterface $request
+     * @return Response
      */
-    public function devis()
+    public function quotation(ServerRequestInterface $request)
     {
-        if (isset($_POST) && !empty($_POST)) {
-
-            $data = $_POST;
-
-            $adForm = MySettings::clean($data['depart']);
-            $adTo = MySettings::clean($data['arrivee']);
-            $rDate = MySettings::clean($data['date-course']);
-            $rTime = MySettings::clean($data['heure-course']);
-            $typeCar = MySettings::clean($data['type-car']);
 
 
-            list($dd, $mm, $yyyy) = explode('/', $rDate);
-            if (!checkdate($mm, $dd, $yyyy)) {
-                MySettings::message('date_error');
-                $this->redirectTo('last_route');
+        $reservationType = new StartReservationType();
+        $form = $reservationType->buildForm();
 
-            }
-            if (!preg_match("/^([01]?[0-9]|2[0-3])\:+[0-5][0-9]$/", $rTime)) {
-                MySettings::message('time_error');
-                $this->redirectTo('last_route');
+        if ($request->getMethod() == 'POST') {
 
-            }
-            if (!is_numeric($typeCar)) {
+            $form->validate($request->getParsedBody());
+            if ($form->isValid()) {
 
-                $this->redirectTo('last_route');
-            }
-
-            $car = new Cars($typeCar);
-            if ($car->getExist() === false) {
-                $this->redirectTo('last_route');
-            }
-
-            $googleApi = new GoogleApi();
-            $infoRoute = $googleApi->getRoute($adForm, $adTo);
-
-            if ($infoRoute === true) {
-
-                $forfait = new Forfait();
-                $checkForfait = $forfait->check($adForm, $adTo);
-
-                $details_addressFrom = new Address($googleApi->getAdresseDepart());
-                $details_addressTo = new Address($googleApi->getAdresseArrivee());
-                $tarif = new Tarifs($car);
-
-                if ($checkForfait === false) {
-
-                    $tarif->priceCalculation($googleApi->getDistance(), $googleApi->getTemps());
-
-                } else {
-
-                    $citys = array(
-                        'from' => $details_addressFrom->getCity(),
-                        'to' => $details_addressTo->getCity()
+                $reservation = new Reservation($form->getData());
+                $car = (new CarRepository())->find($reservation->getCarId());
+                if (!$car) {
+                    $this->addFlash(
+                        'error',
+                        'Aucun véhicule n\'est disponible pour le moment'
                     );
 
-                    $tarif->forfaitCalculation($citys, $googleApi->getDistance(), $googleApi->getTemps(), $checkForfait, $typeCar);
+                    return $this->redirectTo($request->getHeaders()['Referer']);
                 }
-                $thePrice = $tarif->getPrice();
 
-                $bookingNumber = 'N' . mt_rand(10000, 90000);
+                $reservation->setCar($car);
 
-                $data_course = array('REF' => $bookingNumber,
-                    'AD' => $googleApi->getAdresseDepart(),
-                    'AD_LAT' => $details_addressFrom->getLat(),
-                    'AD_LNG' => $details_addressFrom->getLng(),
-                    'AA' => $googleApi->getAdresseArrivee(),
-                    'AA_LAT' => $details_addressTo->getLat(),
-                    'AA_LNG' => $details_addressTo->getLng(),
-                    'KM' => $googleApi->getDistance(),
-                    'TIME' => $googleApi->getTemps(),
-                    'QUEL_DATE' => $rDate,
-                    'QUEL_HEURE' => $rTime,
-                    'PRIX' => $thePrice,
-                    'ID_CAR' => $typeCar,
-                    'CAR' => $car->getType(),
+                $googleApi = new GoogleApi();
+                $infoRoute = $googleApi->getRoute($reservation->getDepart(), $reservation->getArrival());
 
-                );
+                if ($infoRoute) {
 
-                $_SESSION[$bookingNumber] = $data_course;
+                    $reservation
+                        ->setDistance($googleApi->getDistance())
+                        ->setHowLong($googleApi->getTemps())
+                        ->setDetailsAddressFrom(new Address($googleApi->getAddressDepart()))
+                        ->setDetailsAddressTo(new Address($googleApi->getAddressArrival()));
 
-                if ($this->isAjax()) {
+                    $price = new Tarifs($reservation);
+                    $package = new Forfait();
 
-                    echo json_encode($_SESSION[$bookingNumber]);
+                    if ($package->check($googleApi->getAddressDepart(), $googleApi->getAddressArrival())) {
+                        $price->calculationByPackage($package);
+                    } else {
+                        $price->calculation($googleApi->getDistance(), $googleApi->getTemps());
+                    }
+
+                    $reservation->setPrice($price->getPrice());
+                    $_SESSION[$reservation->getReference()] = $reservation;
+
+                    if ($this->isAjax($request)) {
+
+                        return new Response(200, [], json_encode($reservation));
+
+                    } else {
+
+                        return $this->redirectTo('/reservation/' . $reservation->getReference());
+                    }
+                } else {
+                    $this->addFlash('error', 'Informations incorrecte !');
                 }
-                else {
-                    $this->redirectTo('reservation/' . $bookingNumber);
-                }
-            } else {
-                $this->redirectTo('last_route');
+
             }
-        } else {
-            $this->redirectTo('');
-        }
-    }
 
+            return $this->redirectTo($request->getHeaders()['Referer']);
+        }
+
+        return $this->redirectTo('/');
+    }
 }

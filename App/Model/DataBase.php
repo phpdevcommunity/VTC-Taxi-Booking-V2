@@ -1,33 +1,49 @@
 <?php
+
 namespace App\Model;
 
 use PDO;
 use Exception;
 
-class DataBase {
+/***
+ * Class DataBase
+ * @package App\Model
+ */
+class DataBase
+{
 
-	private static $_hName = 'localhost';
-	private static $_dbName = 'test';
-	private static $_ident = 'root';
-	private static $_pass = 'root';
-	private static $_bdd;
+    const HOST_NAME = 'localhost';
+    const DBASE_NAME = '';
+    const USER = '';
+    const PASSWORD = '';
 
-	public static function  connect() {
+    /**
+     * @var PDO $bdd
+     */
+    private $bdd = null;
 
-		if(self::$_bdd === null) {
+    /**
+     * @return PDO|string
+     */
+    public function connect()
+    {
 
-			try
-			{
-				// On se connecte Ã  MySQL
-				$bdd = new PDO('mysql:host='. self::$_hName .';dbname='. self::$_dbName .'', ''. self::$_ident .'', ''. self::$_pass .'', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-				self::$_bdd = $bdd;
-			}
-			catch(Exception $e)
-			{
-				// En cas d'erreur, on affiche un message et on arrÃªte tout
-			    return $e->getMessage();
-			}
-		}
-		return self::$_bdd;	
-	}
+        if ($this->bdd === null) {
+
+            try {
+
+                $this->bdd = new PDO(
+                    'mysql:host=' . self::HOST_NAME . ';dbname=' . self::DBASE_NAME . ''
+                    , '' . self::USER . ''
+                    , '' . self::PASSWORD . ''
+                    , [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+                );
+
+            } catch (Exception $e) {
+
+                return $e->getMessage();
+            }
+        }
+        return $this->bdd;
+    }
 }

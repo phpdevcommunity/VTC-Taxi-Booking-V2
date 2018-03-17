@@ -3,93 +3,128 @@
 namespace App\Service;
 
 use App\Model\Manager\GoogleApiManager;
-use MySettings;
 
+/**
+ * Class GoogleApi
+ * @package App\Service
+ */
 class GoogleApi
 {
 
-    private $_adresseDepart;
-    private $_adresseArrivee;
-    private $_distance;
-    private $_temps;
+    /**
+     * @var string
+     */
+    private $addressDepart;
 
-    public function getRoute($adresseFrom = null, $adresseTo = null)
+    /**
+     * @var string
+     */
+    private $addressArrival;
+
+    /**
+     * @var string
+     */
+    private $distance;
+
+    /**
+     * @var string
+     */
+    private $temps;
+
+    /**
+     * @param null $addressFrom
+     * @param null $addressTo
+     * @return bool
+     */
+    public function getRoute($addressFrom = null, $addressTo = null)
     {
 
-        // Nous verifions si les champs envoyés sont vides et renvoyons une erreur si ceux-la le sont
-
-        if (empty($adresseFrom) || empty($adresseTo)) {
-            MySettings::message('address_error_vide');
+        if (empty($addressFrom) || empty($addressTo)) {
             return false;
         } else {
 
+            $this->addressDepart = str_replace(' ', '+', $addressFrom);
+            $this->addressArrival = str_replace(' ', '+', $addressTo);
 
-            $this->_adresseDepart = MySettings::clean(str_replace(' ', '+', $adresseFrom));
-            $this->_adresseArrivee = MySettings::clean(str_replace(' ', '+', $adresseTo));
-
-            // Nous demandons les détails du trajet (KM + TEMPS)
             $detailsRoute = new GoogleApiManager();
-            $data = $detailsRoute->getDetailsRoute($this->_adresseDepart, $this->_adresseArrivee);
-            if ($data === false) {
+            $data = $detailsRoute->getDetailsRoute($this->addressDepart, $this->addressArrival);
 
-                return false;
-            } else {
-
-
+            if ($data) {
                 $this->setDistance($data['rows'][0]['elements'][0]['distance']['text']);
                 $this->setTemps($data['rows'][0]['elements'][0]['duration']['text']);
-                $this->setAdresseDepart($data['origin_addresses'][0]);
-                $this->setAdresseArrivee($data['destination_addresses'][0]);
+                $this->setAddressDepart($data['origin_addresses'][0]);
+                $this->setAddressArrival($data['destination_addresses'][0]);
                 return true;
             }
+            return false;
         }
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDistance()
+    {
+        return $this->distance;
+    }
+
+    /**
+     * @param $distance
+     */
     public function setDistance($distance)
     {
         $distance = explode(" ", $distance);
-        $this->_distance = $distance[0];
+        $this->distance = $distance[0];
     }
 
-    //Introduction du temps dans la variable $_temps
+    /**
+     * @return mixed
+     */
+    public function getTemps()
+    {
+        return $this->temps;
+    }
 
+    /**
+     * @param $temps
+     */
     public function setTemps($temps)
     {
         $temps = explode(" ", $temps);
-        $this->_temps = $temps[0];
+        $this->temps = $temps[0];
     }
 
-
-    public function setAdresseDepart($address)
+    /**
+     * @return string
+     */
+    public function getAddressDepart()
     {
-        $this->_adresseDepart = $address;
+        return $this->addressDepart;
     }
 
-    public function setAdresseArrivee($address)
+    /**
+     * @param string $addressDepart
+     */
+    public function setAddressDepart($addressDepart)
     {
-        $this->_adresseArrivee = $address;
+        $this->addressDepart = $addressDepart;
     }
 
-
-    public function getDistance()
+    /**
+     * @return string
+     */
+    public function getAddressArrival()
     {
-        return $this->_distance;
+        return $this->addressArrival;
     }
 
-
-    public function getTemps()
+    /**
+     * @param string $addressArrival
+     */
+    public function setAddressArrival($addressArrival)
     {
-        return $this->_temps;
-    }
-
-    public function getAdresseDepart()
-    {
-        return $this->_adresseDepart;
+        $this->addressArrival = $addressArrival;
     }
 
 
-    public function getAdresseArrivee()
-    {
-        return $this->_adresseArrivee;
-    }
 }

@@ -1,57 +1,90 @@
 <?php
+
 namespace App\Model;
 
 use App\Model\Manager\GoogleApiManager;
 
-class Address {
+/**
+ * Class Address
+ * @package App\Model
+ */
+class Address
+{
 
-    private $_city;
-    private $_lng;
-    private $_lat;
-    private $_type;
-    private $_address;
+    private $city;
+    private $lng;
+    private $lat;
+    private $type;
+    private $address;
 
-    private $_details;
+    private $details;
 
-	public function __construct($address) {
+    /**
+     * Address constructor.
+     * @param $address
+     */
+    public function __construct($address)
+    {
 
-		$detailsAddress = new GoogleApiManager();
-		$this->_details = $detailsAddress->getDetailsAddress($address);
+        $detailsAddress = new GoogleApiManager();
+        $this->details = $detailsAddress->getDetailsAddress($address);
 
-        $this->_lat = $this->_details['results'][0]['geometry']['location']['lat'];
-        $this->_lng = $this->_details['results'][0]['geometry']['location']['lng'];
-        $this->_type = $this->_details['results'][0]['types'][0];
+        $this->_lat = $this->details['results'][0]['geometry']['location']['lat'];
+        $this->_lng = $this->details['results'][0]['geometry']['location']['lng'];
+        $this->_type = $this->details['results'][0]['types'][0];
 
 
-        $this->_address = $this->_details['results']['0']['formatted_address'];
+        $this->_address = $this->details['results']['0']['formatted_address'];
 
-		$data = array();
-		foreach($this->_details['results']['0']['address_components'] as $element){
-			$data[ implode(' ',$element['types']) ] = $element['long_name'];
-		}
-		$this->_city = $data['locality political'];
-		
+        $data = [];
+        foreach ($this->details['results']['0']['address_components'] as $element) {
+            $data[implode(' ', $element['types'])] = $element['long_name'];
+        }
+        $this->city = $data['locality political'];
 
-	}
-    public function getCity() {
-        return $this->_city;
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 
 
-    public function getLat() {
-        return $this->_lat;
+    /**
+     * @return mixed
+     */
+    public function getLat()
+    {
+        return $this->lat;
     }
 
-    public function getLng() {
-        return $this->_lng;
+    /**
+     * @return mixed
+     */
+    public function getLng()
+    {
+        return $this->lng;
     }
 
 
-    public function getType() {
-        return $this->_type;
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
     }
-    public function getAddress() {
-        return $this->_address;
+
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 
 }

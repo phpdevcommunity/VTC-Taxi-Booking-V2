@@ -1,195 +1,75 @@
-<!DOCTYPE html>
-<html lang="fr-FR">
+<!doctype html>
+<html lang="en">
 <head>
-    <title>{% block title %}Transcar Paris{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="Content-Language" content="fr"/>
-    <meta name="language" content="fr"/>
-    <meta name="Description"
-          content="Réservez un chauffeur VTC, moins cher qu'un taxi, en choisissant un forfait aéroports / gares ou un lieu de prise en charge. Prix fixe sans mauvaise surprise."/>
-    <meta name="Keywords"
-          content="transport, voyageur, VTC, chauffeur privé, uber, transport de personnes, taxi, roissy, orly, charles de gaulle, navette roissy, vtc roissy pas cher, vtc aeroport paris roissy, taxi cdg paris, taxi aéroport charles de gaulle, taxi paris roissy, taxi pour roissy, forfait taxi aeroport paris, reserver un taxi pour roissy, prix taxi aeroport paris, transport aéroport orly, taxi tarif orly, prix taxi paris orly, taxi orly, taxi orly paris prix, tarif taxi aeroport orly, transfert paris orly, forfait taxi paris orly, taxi paris orly, vtc pour orly, vtc orly pas cher, taxi tarif, reservation de taxi, vtc tarif, tarif vtc, vtc prix, vtc pas cher, taxi pas cher paris, taxi pas cher, reservation taxi, reservation chauffeur vtc, commander un vtc, taxi vtc pas cher, forfait aeroport taxi, reserver un vtc, chauffeur privé"/>
-    <meta name="Copyright" content="<?= MySettings::$_society ?> © 2017. All Rights Reserved."/>
-    <meta name="Author" content="Fady michel"/>
-    <meta name="revisit-after" content="1 days"/>
-    <meta name="Identifier-Url" content="<?= MySettings::$_link ?>">
-    <meta name="Robots" content="index,follow"/>
-    <meta name="Rating" content="general"/>
-    <meta name="Distribution" content="global"/>
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/site.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/default.css') }}">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-        <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-        <style>
-            body, h1, h2, h3, h4, h5, h6 {
-                font-family: Arial, Helvetica, sans-serif;
-            }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}{{ param('_society') }}{% endblock %}</title>
 
-            body, html {
-                height: 100%;
-                color: #777;
-                line-height: 1.8;
-            }
-
-            /* Create a Parallax Effect */
-            .bgimg-1, .bgimg-2, .bgimg-3, .bgimgr-1, .bgimg-4, .bgimg-5 {
-                background-attachment: fixed;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: cover;
-
-            }
-
-            /* First image (Logo. Full height) */
-            .bgimg-1 {
-                background-image: url('{{ asset('images/paris3.jpg') }}');
-            {% if session.id_em is defined %}
-                min-height: 800px;
-            {% else %}
-                min-height: 700px;
-            {% endif %}
-            }
-
-            .bgimgr-1 {
-                background-image: url('{{ asset('images/paris3.jpg') }}');
-                min-height: 40%;
-            }
-
-            /* Second image (Portfolio) */
-            .bgimg-2 {
-                background-image: url("{{ asset('images/mercedes.jpg') }}");
-                min-height: 400px;
-            }
-
-            /* Third image (Contact) */
-            .bgimg-3 {
-                background-image: url("{{ asset('images/paris2.jpg') }}");
-                min-height: 400px;
-            }
-
-            .bgimg-4 {
-                background-image: url("{{ asset('images/gare.jpg') }}");
-                min-height: 400px;
-            }
-
-            .bgimg-5 {
-                background-image: url("{{ asset('images/airport.jpg') }}");
-                min-height: 400px;
-            }
-
-            @media only screen and (max-device-width: 1024px) {
-                .bgimg-1, .bgimg-2, .bgimg-3, .bgimgr-1, .bgimg-4, .bgimg-5 {
-                    background-attachment: scroll;
-                }
-            }
-
-            /* Adjust the position of the parallax image text */
-            .w3-display-middle2 {
-                top: 15%
-            }
-
-            .w3-wide {
-                letter-spacing: 10px;
-            }
-
-            .w3-hover-opacity {
-                cursor: pointer;
-            }
-
-            .mep-select img {
-                margin-bottom: -20px;
-            }
-
-            .paiement img {
-                height: 25px;
-                margin-left: 10px;
-            }
-
-            #mapsDevis {
-                width: 100%;
-                height: 400px;
-
-            }
-        </style>
+    <link href="{{ asset('vendor/twbs/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet">
+    {% block stylesheet %}
+    <link href="{{ asset('view/css/front.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/components/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.date.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.time.css') }}" rel="stylesheet">
     {% endblock %}
-
 </head>
 <body>
 {% block header %}
-    {% include 'nav.html.twig' %}
+<header>
+    <div class="jumbotron-fluid bg {% if not home %}mini-bg{% endif %}">
+        {% block nav %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand logo" href="#">
+                <img src="{{ asset('view/images/berline.png') }}" width="30" height="30"
+                     class="d-inline-block align-top" alt="">
+                {{ param('society') }}
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% endblock %}
+        {% block card %}
+        {% endblock %}
+    </div>
+</header>
 {% endblock %}
 
-{% block body %}
-{% endblock %}
-
-{% block footer %}
-    <footer class="w3-center w3-li-grey w3-padding-64 w3-opacity w3-hover-opacity-off">
-        <a href="#home" class="w3-btn w3-padding w3-grey"><i class="fa fa-arrow-up w3-margin-right"></i>Haut de page</a>
-        <div class="w3-row-padding">
-            <div class="w3-half">
-                <p class="w3-center w3-xlarge w3-text-green"><b>Paiement sécurisé</b></p>
-                <p><img src="{{ asset('images/accepted.png') }}" alt="paiement sécurisé"/></p>
-            </div>
-            <div class="w3-half">
-                <div class="w3-xlarge w3-section">
-                    <a href="https://www.facebook.com/transcarparis/" target="_blank"><i
-                                class="fa fa-facebook-official w3-hover-text-indigo"></i></a>
-                    <i class="fa fa-twitter w3-hover-text-light-blue"></i>
-                    <i class="fa fa-linkedin w3-hover-text-indigo"></i>
-                </div>
-                <p><a href="<?= MySettings::$_prefixSite ?>cgv/">Conditions Générales De Ventes</a></p>
-                <p><a href="<?= MySettings::$_prefixSite ?>mentions-legales/">Mentions Légales</a></p>
-            </div>
-        </div>
-
-        <p class="w3-small">
-            <span class="w3-tag w3-grey w3-small w3-margin-bottom">Uber
-            </span>
-            <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">Chauffeur privé
-            </span>
-            <span class="w3-tag w3-grey w3-small w3-margin-bottom">VTC</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">transport</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">personnes</span>
-            <span class="w3-tag w3-grey w3-small w3-margin-bottom">TPMR</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">forfait aéroport</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">forfait gares</span>
-            <span class="w3-tag w3-grey w3-small w3-margin-bottom">réservation vtc</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">cab</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">transcar</span>
-            <span class="w3-tag w3-grey w3-small w3-margin-bottom">réserver vtc</span> <span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">forfait taxi aeroport paris</span><span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">vtc prix</span><span
-                    class="w3-tag w3-grey w3-small w3-margin-bottom">prix taxi aeroport paris</span>
-        </p>
-        <p><?= MySettings::$_society ?> - Tous droits réservés © 2016-2017</p>
+<main role="main">
+    {% block content %}
+    {% endblock %}
+    {% block footer %}
+    <footer class="container">
+        <p class="float-right"><a href="#">Back to top</a></p>
+        <p>&copy; {{ date('now')|date('Y') }} {{ param('_society') }} &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
     </footer>
-{% endblock %}
-
+    {% endblock %}
+</main>
 {% block javascripts %}
-    <script src="{{ asset('js/jquery.js') }}"></script>
-    <script src="{{ asset('js/menu.js') }}"></script>
-    {#<script src="https://www.blackberline.fr/view/js/cookiechoices.js"></script><script>document.addEventListener('DOMContentLoaded', function(event){cookieChoices.showCookieConsentBar('Ce site utilise des cookies pour vous offrir le meilleur service. En poursuivant votre navigation, vous acceptez l’utilisation des cookies.', 'J’accepte', 'En savoir plus', 'https://www.blackberline.fr/mentions-legales/');});</script>#}
+<script src="{{ asset('vendor/components/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('vendor/twbs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
 {% endblock %}
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Organization",
-  "name": "Transcar Paris VTC",
-  "url": "https://www.transcarparis.fr",
-  "description": "Réservez un VTC en toute Liberté en choisissant un forfait aéroport / gares ou un lieu de prise en charge, la date et l’heure exacte ainsi que le mode de paiement.",
-  "contactPoint": [{
-    "@type": "ContactPoint",
-    "telephone": "+33184214698",
-    "contactType": "customer service"
-  }]
-}
 
-
-</script>
 </body>
 </html>

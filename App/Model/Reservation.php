@@ -2,196 +2,516 @@
 
 namespace App\Model;
 
-use MySettings;
 
-class Reservation
+use Fady\Entity\Entity;
+
+/**
+ * Class Reservation
+ * @package App\Model
+ */
+class Reservation extends Entity
 {
 
-    protected $_depart;
-    protected $_arrivee;
-    protected $_distance;
-    protected $_temps;
-    protected $_quelle_date;
-    protected $_quelle_heure;
-
-    protected $_reference;
-
-    protected $_passagers;
-    protected $_vol;
-    protected $_note;
-
-    protected $_prix;
-
-    protected $_method_paiement;
-
-    protected $_prenom;
-    protected $_nom;
-    protected $_mail;
-    protected $_phone;
-    protected $_date_time;
-    protected $_car_id;
-    protected $_car;
+    const PAYMENT_CASH = 1;
+    const PAYMENT_CARD = 2;
 
 
-    public function __construct($details_res, $details_client)
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $depart;
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $arrival;
+
+    /**
+     * @var int
+     * @Mapped
+     */
+    protected $distance;
+
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $howLong;
+
+    /**
+     * @var \DateTime
+     * @Mapped
+     */
+    protected $dateTransfer;
+    /**
+     * @var \DateTime
+     * @Mapped
+     */
+    protected $timeTransfer;
+
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $reference;
+
+    /**
+     * @var int
+     * @Mapped
+     */
+    protected $passengers;
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $vol;
+
+    /*
+     * @var string
+     * @Mapped
+     */
+    protected $note;
+
+    /**
+     * @var float
+     * @Mapped
+     */
+    protected $price;
+
+    /**
+     * @var int
+     * @Mapped
+     */
+    protected $methodPayment;
+
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $lastName;
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $mail;
+
+    /**
+     * @var string
+     * @Mapped
+     */
+    protected $phone;
+    /**
+     * @var \DateTime
+     * @Mapped
+     */
+    protected $dateReservation;
+
+    /**
+     * @var int
+     * @Mapped
+     */
+    protected $carId;
+
+    /**
+     * No mapped -----------------------------------
+     */
+
+    /**
+     * @var Car
+     */
+    protected $car;
+    
+    /**
+     * @var Address
+     */
+    protected $detailsAddressFrom;
+
+    /**
+     * @var Address
+     */
+    protected $detailsAddressTo;
+
+
+    public function __construct(array $data = null)
     {
+        $this->hydrate($data);
 
-        extract($details_res);
-        $this->_depart = $AD;
-        $this->_arrivee = $AA;
-        $this->_distance = $KM;
-        $this->_temps = $TIME;
-        $this->_quelle_date = $QUEL_DATE;
-        $this->_quelle_heure = $QUEL_HEURE;
-        $this->_reference = $REF;
-        $this->_car_id = $ID_CAR;
-        $this->_car = $CAR;
+        if ($this->getId() === null || empty($this->getId())) {
 
-        extract($details_client);
-        $this->_prenom = MySettings::clean($prenom);
-        $this->_nom = MySettings::clean(strtoupper($nom));
-        $this->_mail = strtolower(MySettings::clean($email));
-        $this->_phone = MySettings::clean($telephone);
+            $this->reference = 'N' . mt_rand(10000, 90000);
+            $this->dateReservation = new \DateTime();
+            $this->methodPayment = self::PAYMENT_CASH;
 
-        $this->_passagers = MySettings::clean($passagers);
-        $this->_vol = MySettings::clean(strtoupper($volNumber));
-        $this->_note = MySettings::clean($note);
-        $this->_method_paiement = $typePaiement;
-        $this->_date_time = date("Y-m-d H:i:s");
-
-        $this->_prix = $PRIX;
-
-
-    }
-
-    public function checkData()
-    {
-        if (!preg_match('#^[a-zA-Z]{3,25}$#', $this->_prenom) || !preg_match('#^[a-zA-Z]{3,25}$#', $this->_nom)) {
-
-            MySettings::message('name_error');
-            return false;
-
-        } elseif (!preg_match("#^[0-9]{6,}$#", $this->_phone)) {
-
-            MySettings::message('phone_error');
-            return false;
-
-        } elseif (!preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $this->_mail)) {
-
-            MySettings::message('mail_error');
-            return false;
-
-
-        } elseif (!preg_match("#^[1-8]{1}$#", $this->_passagers)) {
-
-            MySettings::message('passagers_error');
-            return false;
-
-        } elseif ($this->_method_paiement != 1 && $this->_method_paiement != 2) {
-
-            MySettings::message('choose_payment_error');
-            return false;
-
-        } else {
-
-            return true;
         }
 
-
     }
 
+
+    /**
+     * @return string
+     */
     public function getDepart()
     {
-        return $this->_depart;
+        return $this->depart;
     }
 
-    public function getArrivee()
+    /**
+     * @param string $depart
+     */
+    public function setDepart(string $depart)
     {
-        return $this->_arrivee;
+        $this->depart = $depart;
+        return $this; 
     }
 
+    /**
+     * @return string
+     */
+    public function getArrival()
+    {
+        return $this->arrival;
+    }
+
+    /**
+     * @param string $arrival
+     */
+    public function setArrival(string $arrival)
+    {
+        $this->arrival = $arrival;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getDistance()
     {
-        return $this->_distance;
+        return $this->distance;
     }
 
-    public function getTemps()
+    /**
+     * @param int $distance
+     */
+    public function setDistance(int $distance)
     {
-        return $this->_temps;
+        $this->distance = $distance;
+        return $this;
     }
 
-    public function getDate()
+    /**
+     * @return string
+     */
+    public function getHowLong()
     {
-        return $this->_quelle_date;
+        return $this->howLong;
     }
 
-    public function getHeure()
+    /**
+     * @param string $howLong
+     */
+    public function setHowLong(string $howLong)
     {
-        return $this->_quelle_heure;
+        $this->howLong = $howLong;
+        return $this;
     }
 
-    public function getDateTime()
+    /**
+     * @return \DateTime
+     */
+    public function getDateTransfer()
     {
-        return $this->_date_time;
+        return $this->dateTransfer;
     }
 
+    /**
+     * @param \DateTime $dateTransfer
+     */
+    public function setDateTransfer(\DateTime $dateTransfer)
+    {
+        $this->dateTransfer = $dateTransfer;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTimeTransfer()
+    {
+        return $this->timeTransfer;
+    }
+
+    /**
+     * @param \DateTime $timeTransfer
+     */
+    public function setTimeTransfer(\DateTime $timeTransfer)
+    {
+        $this->timeTransfer = $timeTransfer;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getReference()
     {
-        return $this->_reference;
+        return $this->reference;
     }
 
-    public function getPassagers()
+    /**
+     * @param string $reference
+     */
+    public function setReference(string $reference)
     {
-        return $this->_passagers;
+        $this->reference = $reference;
+        return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getPassengers()
+    {
+        return $this->passengers;
+    }
+
+    /**
+     * @param int $passengers
+     */
+    public function setPassengers(int $passengers)
+    {
+        $this->passengers = $passengers;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getVol()
     {
-        return $this->_vol;
+        return $this->vol;
     }
 
+    /**
+     * @param string $vol
+     */
+    public function setVol(string $vol)
+    {
+        $this->vol = $vol;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getNote()
     {
-        return $this->_note;
+        return $this->note;
     }
 
-    public function getNom()
+    /**
+     * @param mixed $note
+     */
+    public function setNote($note)
     {
-        return $this->_nom;
+        $this->note = $note;
+        return $this;
     }
 
-    public function getPrenom()
+    /**
+     * @return float
+     */
+    public function getPrice()
     {
-        return $this->_prenom;
+        return $this->price;
     }
 
-    public function getPhone()
+    /**
+     * @param float $price
+     */
+    public function setPrice(float $price)
     {
-        return $this->_phone;
+        $this->price = $price;
+        return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getMethodPayment()
+    {
+        return $this->methodPayment;
+    }
+
+    /**
+     * @param int $methodPayment
+     */
+    public function setMethodPayment(int $methodPayment)
+    {
+        $this->methodPayment = $methodPayment;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName(string $lastName)
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName(string $firstName)
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getMail()
     {
-        return $this->_mail;
+        return $this->mail;
     }
 
-    public function getPrix()
+    /**
+     * @param string $mail
+     */
+    public function setMail(string $mail)
     {
-        return $this->_prix;
+        $this->mail = $mail;
+        return $this;
     }
 
-    public function getPaiement()
+    /**
+     * @return string
+     */
+    public function getPhone()
     {
-        return $this->_method_paiement;
+        return $this->phone;
     }
 
+    /**
+     * @param string $phone
+     */
+    public function setPhone(string $phone)
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateReservation()
+    {
+        return $this->dateReservation;
+    }
+
+    /**
+     * @param \DateTime $dateReservation
+     */
+    public function setDateReservation(\DateTime $dateReservation)
+    {
+        $this->dateReservation = $dateReservation;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getCarId()
     {
-        return $this->_car_id;
+        return $this->carId;
     }
 
+    /**
+     * @param int $carId
+     */
+    public function setCarId(int $carId)
+    {
+        $this->carId = $carId;
+        return $this;
+    }
+
+    /**
+     * @return Car
+     */
     public function getCar()
     {
-        return $this->_car;
+        return $this->car;
     }
+
+    /**
+     * @param Car $car
+     * @return $this
+     */
+    public function setCar(Car $car = null)
+    {
+        $this->car = $car;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetailsAddressFrom()
+    {
+        return $this->detailsAddressFrom;
+    }
+
+    /**
+     * @param mixed $detailsAddressFrom
+     */
+    public function setDetailsAddressFrom(Address $detailsAddressFrom)
+    {
+        $this->detailsAddressFrom = $detailsAddressFrom;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetailsAddressTo()
+    {
+        return $this->detailsAddressTo;
+    }
+
+    /**
+     * @param mixed $detailsAddressTo
+     */
+    public function setDetailsAddressTo(Address $detailsAddressTo)
+    {
+        $this->detailsAddressTo = $detailsAddressTo;
+        return $this;
+    }
+
+
+
 }

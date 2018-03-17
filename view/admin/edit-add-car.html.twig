@@ -1,0 +1,61 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'admin/menu.html.twig' %}
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+                <h2>{% if car.id %}Modifier{% else %}Ajouter{% endif %} le véhicule</h2>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form.start|raw }}
+                            {{ flash.get('success')|raw }}
+                            {{ flash.get('error')|raw }}
+                            <div class="form-group">
+                                <label for="type">Type du véhicule</label>
+                                {{ form.elements.type|raw }}
+                                {{ form.error('type')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="kmPrice">Prix au kilometre</label>
+                                {{ form.elements.kmPrice|raw }}
+                                {{ form.error('kmPrice')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="minutePrice">Prix à la minute</label>
+                                {{ form.elements.minutePrice|raw }}
+                                {{ form.error('minutePrice')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="minimumPrice">Tarif minimum</label>
+                                {{ form.elements.minimumPrice|raw }}
+                                {{ form.error('minimumPrice')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="increase">Majoration (%)</label>
+                                {{ form.elements.increase|raw }}
+                                {{ form.error('increase')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="places">Nombre de places max</label>
+                                {{ form.elements.places|raw }}
+                                {{ form.error('places')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="bags">Nombre de bagages max</label>
+                                {{ form.elements.bags|raw }}
+                                {{ form.error('bags')|raw }}
+                            </div>
+                            <button class="btn btn-success btn-lg btn-block submit" type="submit">Enregistrer</button>
+                            {{ form.end|raw }}
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+{% endblock %}
