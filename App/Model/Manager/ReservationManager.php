@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Manager;
 
+use App\Model\DataBase;
 use App\Model\Reservation;
 use PDO;
 
@@ -11,14 +12,12 @@ class ReservationManager {
      */
 	protected $_bdd;
 	
-	public function __construct($_db){
+	public function __construct(){
 
-		$this->_bdd = $_db;
+		$this->_bdd = DataBase::connect();
 	}
 	public function addReservation(Reservation $reservation) {
 
-		$date = str_replace('/', '-', $reservation->getDate());
-		$date =  date('Y-m-d', strtotime($date));
 
 		$req = $this->_bdd->prepare('
                               INSERT INTO reservations(reference, depart, nom, prenom, arrivee, date_course, date_heure_reserv, heure_course, km, duree, passagers, no_vol, note, prix, email, method_paiement, telephone, car_id)
@@ -28,20 +27,20 @@ class ReservationManager {
 		$req->execute(array(
 			'reference' => $reservation->getReference(),
 			'depart' => $reservation->getDepart(),
-			'nom' => $reservation->getNom(),
-			'prenom' => $reservation->getPrenom(),
-			'arrivee' => $reservation->getArrivee(),
-			'date_course' => $date,
-			'date_heure_reserv' => $reservation->getDateTime(),
-			'heure_course' => $reservation->getHeure(),
+			'nom' => $reservation->getLastName(),
+			'prenom' => $reservation->getFirstName(),
+			'arrivee' => $reservation->getArrival(),
+			'date_course' => $reservation->getDateTransfer(),
+			'date_heure_reserv' => $reservation->getDateReservation(),
+			'heure_course' => $reservation->getTimeTransfer(),
 			'km' => $reservation->getDistance(),
-			'duree' => $reservation->getTemps(),
-			'passagers' => $reservation->getPassagers(),
+			'duree' => $reservation->getHowLong(),
+			'passagers' => $reservation->getPassengers(),
 			'no_vol' => $reservation->getVol(),
 			'note' => $reservation->getNote(),
-			'prix' => $reservation->getPrix(),
+			'prix' => $reservation->getPrice(),
 			'email' => $reservation->getMail(),
-			'method_paiement' => $reservation->getPaiement(),
+			'method_paiement' => $reservation->getMethodPayment(),
 			'telephone' => $reservation->getPhone(),
 			'car_id' => $reservation->getCarId()
 			));

@@ -8,9 +8,79 @@
       "App\\": "App"
     }
   },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "amsul/pickadate",
+        "version": "4.0.0",
+        "source": {
+          "url": "https://github.com/amsul/pickadate.js.git",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "jquery-validation/jquery-validation",
+        "version": "1.17.0",
+        "source": {
+          "url": "https://github.com/jquery-validation/jquery-validation.git",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "FadymichelR/Form-validation",
+        "version": "1.0",
+        "source": {
+          "url": "https://github.com/FadymichelR/Form-validation.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "psr-4": {
+            "Fady\\Form\\": ""
+          }
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "FadymichelR/PHP-Database-Access",
+        "version": "1.0.1",
+        "source": {
+          "url": "https://github.com/FadymichelR/PHP-Database-Access.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "psr-4": {
+            "Fady\\": ""
+          }
+        }
+      }
+    }
+  ],
   "require": {
     "phpmailer/phpmailer": "^6.0",
     "stripe/stripe-php": "^5.6",
-    "twig/twig": "~2.0"
+    "twig/twig": "~2.0",
+    "twbs/bootstrap": "4.0.0",
+    "components/jquery": "^1.7",
+    "components/font-awesome": "^4.7",
+    "amsul/pickadate": "4.0.0",
+    "jquery-validation/jquery-validation": "1.17.0",
+    "FadymichelR/Form-validation": "*",
+    "FadymichelR/PHP-Database-Access": "1.0.1",
+    "datatables/datatables": "^1.10",
+    "guzzlehttp/psr7": "^1.4",
+    "http-interop/response-sender": "^1.0"
   }
 }

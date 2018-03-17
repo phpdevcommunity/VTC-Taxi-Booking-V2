@@ -1,43 +1,53 @@
 <?php
 
+if (in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'], true)) {
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+}
+
 use App\Router\Router;
 use App\Router\Route;
-use App\Controller\Controller;
 
 require __DIR__ . '/vendor/autoload.php';
-require 'MySettings.php';
+session_start();
 
-MySettings::load();
+$request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
-$url = isset($_GET['url']) ? $_GET['url'] : 'home';
-
-$router = new Router;
-$router->addRoute(new Route('home', 'Controller', 'home'));
-$router->addRoute(new Route('reservation/devis', 'Controller', 'devis'));
-$router->addRoute(new Route('reservation/([a-zA-Z0-9]+)', 'Controller', 'booking' , ['reference']));
-$router->addRoute(new Route('admin', 'ControllerAdmin', 'home'));
-$router->addRoute(new Route('logout', 'ControllerAdmin', 'logOut'));
-$router->addRoute(new Route('admin/generate/bon', 'ControllerAdmin', 'bonAdmin'));
-$router->addRoute(new Route('admin/bon/([0-9]+)', 'ControllerAdmin', 'bon', ['id']));
+$router = new Router();
+$router->addRoute(new Route('/', 'Controller', 'home'));
+$router->addRoute(new Route('/reservation/quotation', 'Controller', 'quotation'));
+$router->addRoute(new Route('/reservation/([a-zA-Z0-9]+)', 'Controller', 'booking', ['reference']));
+$router->addRoute(new Route('/admin', 'AdminController', 'home'));
+$router->addRoute(new Route('/admin/generate/bon', 'AdminController', 'bonAdmin'));
+$router->addRoute(new Route('/admin/reservations/data', 'AdminController', 'data'));
+$router->addRoute(new Route('/admin/bon/([a-zA-Z0-9]+)', 'AdminController', 'bon', ['id']));
+$router->addRoute(new Route('/admin/parameters', 'AdminController', 'parameter'));
+$router->addRoute(new Route('/admin/cars', 'AdminController', 'cars'));
+$router->addRoute(new Route('/admin/car/edit/([0-9]+)', 'AdminController', 'carManager', ['id']));
+$router->addRoute(new Route('/admin/car/add', 'AdminController', 'carManager'));
+$router->addRoute(new Route('/admin/cars/data', 'AdminController', 'dataCars'));
+$router->addRoute(new Route('/login', 'UserController', 'login'));
+$router->addRoute(new Route('/logout', 'UserController', 'logOut'));
 
 try {
-    $matchedRoute = $router->getRoute($url);
 
-
-    $controller = 'App\\Controller\\' . $matchedRoute->getController();
-    $_GET = array_merge($_GET, $matchedRoute->getVars());
-    $action = $matchedRoute->getAction();
-
+    /**
+     * @var Route $route
+     */
+    $route = $router->getRoute($request->getUri()->getPath());
+    $controller = 'App\\Controller\\' . $route->getController();
+    $action = $route->getAction();
     $execute = new $controller;
-    $execute->$action(!empty($matchedRoute->getVars()) ? implode(',', $matchedRoute->getVars()) : null);
-}
-catch (\Exception $e)  {
+
+    /**
+     * @var \GuzzleHttp\Psr7\Response $response
+     */
+    $response = $execute->$action($request, !empty($route->getVars()) ? implode(',', $route->getVars()) : null);
+
+    \Http\Response\send($response);
+
+} catch (\Exception $e) {
 
 
-    $controller = new Controller();
-    if ($controller->other($url) === false) {
-
-        header("HTTP/1.0 404 Not Found");
-
-    }
+    \Http\Response\send(new \GuzzleHttp\Psr7\Response(404));
 }

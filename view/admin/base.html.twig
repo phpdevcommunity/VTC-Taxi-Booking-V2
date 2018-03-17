@@ -1,46 +1,23 @@
-<!DOCTYPE html>
-<html>
-<title>{{ param('_society') }} - Administration</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="{{ asset('css/admin/w3.css') }}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-</style>
-<body class="w3-light-grey">
+{% extends 'base.html.twig' %}
 
-<!-- Top container -->
-<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> {{ param('_society') }}</button>
-    <span class="w3-bar-item">{{ param('_society') }}</span>
-</div>
 
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
-    <div class="w3-container w3-row">
-        <div class="w3-col s12 w3-bar">
-            <span>Bienvenue, <strong>{{ session.id_em.username }}</strong></span><br>
-            <a href="{{ route('logout') }}" class="w3-bar-item w3-button w3-padding">Déconnexion</a>
-        </div>
-    </div>
-    <hr>
-    <div class="w3-container">
-        <h5>Tableau de bord</h5>
-    </div>
-    <div class="w3-bar-block">
-        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Fermer</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-laptop"></i>  Accueil</a>
-        <a href="{{ route('admin/generate/bon') }}" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog"></i> Bon de réservation</a>
-    </div>
-</nav>
-
-{% block body %}
+{% block stylesheet %}
+    <link href="{{ asset('view/css/dashboard.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/components/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
 {% endblock %}
 
 
-{% block javascript %}
+{% block header %}
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">{{ param('society') }}</a>
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="{{ route('logout') }}">Deconnexion</a>
+                </li>
+            </ul>
+        </nav>
 {% endblock %}
-</body>
-</html>
+
+
+{% block footer %}
+{% endblock %}

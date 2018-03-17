@@ -1,148 +1,121 @@
 {% extends 'base.html.twig' %}
-{% block body %}
-    <div class="bgimg-1 w3-opacity w3-display-container" id="home">
-        <div class="w3-display-topleftte2 w3-padding" style="max-width:800px">
-            {% include 'form/reservation.html.twig' %}
-        </div>
-    </div>
-    <div class="w3-container w3-padding-large w3-center">
-        <h2 class="w3-xxxlarge"><b>Courses et réservations</b></h2>
-        <h2 class="w3-xxlarge w3-text-green"><b>Comment ça marche ?</b></h2>
-        <p class="w3-xlarge">Le principe est simple, il vous suffit de remplir le formulaire ci-dessus afin de calculer
-            le montant de votre course, si le montant vous convient, cliquez sur "<span class="w3-text-green">Réservez maintenant</span>"
-            et entrez les informations nécessaires pour la réservation de votre chauffeur privé. Une fois le paiement
-            efféctué vous recevrez un email de confirmation contenant un récapitulatif de votre commande. Le nom,
-            téléphone du chauffeur vtc et l'immatriculation du véhicule vous seront envoyés par email la veille de votre
-            prise en charge de manière automatique.</p>
-        <div class="w3-row-padding w3-center" style="margin-top:64px">
-            <div class="w3-quarter">
-                <i class="fa fa-lock w3-margin-bottom w3-jumbo w3-text-green"></i>
-                <p class="w3-large">Paiement Sécurisé</p>
-                <p>Les transactions effectuées sont 100% sécurisées par le système de paiement de notre partenaire
-                    STRIPE <br/>
-                    Toutes les informations échangées pour traiter le paiement sont cryptées grâce au protocole SSL.
-                </p>
-            </div>
-            <div class="w3-quarter">
-                <i class="fa fa-wifi w3-margin-bottom w3-jumbo w3-center"></i>
-                <p class="w3-large">Wi-Fi à bord</p>
-                <p>Wi-Fi gratuit et illimité. Restez connecté même pendant votre trajet grâce au haut débit 4G.</p>
-            </div>
-            <div class="w3-quarter">
-                <i class="fa fa-eur w3-margin-bottom w3-jumbo w3-text-amber"></i>
-                <p class="w3-large">Tarif Fixe</p>
-                <p>Tarifs compétitifs et fixés à l'avance.<br/>
-                    Dès la commande vous connaissez la somme exacte de votre course calculée en fonction du kilométrage
-                    ou de la prestation de service.
-                </p>
-            </div>
-            <div class="w3-quarter">
-                <i class="fa fa-battery-full w3-margin-bottom w3-jumbo w3-text-black"></i>
-                <p class="w3-large">Services</p>
-                <p>Vous trouverez à bord bouteille d’eau, bonbons, chargeur téléphone et prise jack pour écouter votre
-                    propre musique.</p>
-            </div>
-        </div>
 
-    </div>
-    <!-- Second Parallax Image with Portfolio Text -->
-    <div class="bgimg-2 w3-display-container">
-        <div class="w3-display-middle">
-            <span class="w3-xxlarge w3-text-white w3-wide w3-black w3-padding-xlarge">FORFAITS</span>
-        </div>
-    </div>
-
-    <section id="prest">
-
-
-        <div class="w3-content w3-container w3-padding-64">
-            <h2 class="w3-center">FORFAITS VTC AEROPORTS/GARES</h2>
-            <p class="w3-center"><em>Découvrez plus en détail nos forfaits</em></p><br>
-            <div class="w3-row-padding" style="margin:0 -16px">
-                <div class="w3-third w3-margin-bottom">
-                    <ul class="w3-ul w3-border w3-white w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-light-grey w3-xlarge w3-padding-32">Paris - Roissy CDG</li>
-                        <li class="w3-padding-16">Berline Eco/Affaires</li>
-                        <li class="w3-padding-16">Prise en charge de vos bagages</li>
-                        <li class="w3-padding-16">Prix fixé à l'avance</li>
-                        <li class="w3-padding-16">20 minutes d'attente offertes</li>
-                        <li class="w3-padding-16">
-                            <h3>
-                                <del>55,00 € TTC</del>
-                            </h3>
-                            <h2>49.90 € TTC*</h2>
-                        </li>
-                        <li class="w3-li-grey w3-padding-24">
-                            <a href="<?= MySettings::$_prefixSite ?>aeroport-paris-roissy-charles-de-gaulle-vtc-taxi/">
-                                <button class="w3-btn w3-grey w3-padding-large w3-hover-black">Détails</button>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="w3-third w3-margin-bottom">
-                    <ul class="w3-ul w3-border w3-white w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-light-grey w3-xlarge w3-padding-32">Paris - Aéroport d'Orly</li>
-                        <li class="w3-padding-16">Berline Eco/Affaires</li>
-                        <li class="w3-padding-16">Prise en charge de vos bagages</li>
-                        <li class="w3-padding-16">Prix fixé à l'avance</li>
-                        <li class="w3-padding-16">20 minutes d'attente offertes</li>
-                        <li class="w3-padding-16">
-                            <h3>
-                                <del>50,00 € TTC</del>
-                            </h3>
-                            <h2>44.90 € TTC*</h2>
-                        </li>
-                        <li class="w3-li-grey w3-padding-24">
-                            <a href="<?= MySettings::$_prefixSite ?>aeroport-paris-orly-vtc-taxi/">
-                                <button class="w3-btn w3-grey w3-padding-large w3-hover-black">Détails</button>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="w3-third">
-                    <ul class="w3-ul w3-border w3-white w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-light-grey w3-xlarge w3-padding-32">Paris - Beauvais</li>
-                        <li class="w3-padding-16">Berline Eco/Affaires</li>
-                        <li class="w3-padding-16">Prise en charge de vos bagages</li>
-                        <li class="w3-padding-16">Prix fixé à l'avance</li>
-                        <li class="w3-padding-16">20 minutes d'attente offertes</li>
-                        <li class="w3-padding-16">
-                            <h3>
-                                <del>150,00 € TTC</del>
-                            </h3>
-                            <h2>119,90 € TTC*</h2>
-                        </li>
-                        <li class="w3-li-grey w3-padding-24">
-                            <a href="<?= MySettings::$_prefixSite ?>aeroport-paris-beauvais-vtc-taxi/">
-                                <button class="w3-btn w3-grey w3-padding-large w3-hover-black">Détails</button>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <em>*Prix hors majoration susceptible d'être appliquée selon les heures de pointes ou la prise en charge le
-                dimanche.</em><br>
-            <em>Temps de trajet vers l'aéroport de Paris CDG : environ 1h30 aux heures de pointes et 1h hors heures de
-                pointes</em><br>
-            <em>Temps de trajet vers l'aéroport de Paris Orly : environ 1h00 aux heures de pointes et 45min hors heures
-                de pointes</em>
-        </div>
-    </section>
+{% block card %}
+    {% include 'form/reservation.html.twig' %}
 {% endblock %}
+
+{% block content %}
+    <div class="container text-center mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <span class="fa fa-5x fa fa-lock"></span>
+                <h2>Paiement sécurisé</h2>
+                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
+                    vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
+                    cursus magna.</p>
+            </div>
+            <div class="col-lg-4">
+                <span class="fa fa-5x fa-wifi"></span>
+                <h2>Wi-Fi à bord</h2>
+                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras
+                    mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+                    condimentum nibh.</p>
+            </div>
+            <div class="col-lg-4">
+                <i class="fa fa-5x fa-eur"></i>
+                <h2>Prix fixe</h2>
+                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
+                    porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
+                    ut fermentum massa justo sit amet risus.</p>
+            </div>
+        </div>
+
+        <hr class="separator-lg">
+
+        <div class="row featurette">
+            <div class="col-md-7 align-self-center">
+                <h2>Comment ça marche ?</h2>
+                <p class="lead">
+                    Le principe est simple, il vous suffit de remplir le formulaire ci-dessus afin de calculer le
+                    montant de votre course, si le montant vous convient, cliquez sur "Réservez maintenant" et entrez
+                    les informations nécessaires pour la réservation de votre chauffeur privé. Une fois le paiement
+                    efféctué vous recevrez un email de confirmation contenant un récapitulatif de votre commande. Le
+                    nom, téléphone du chauffeur vtc et l'immatriculation du véhicule vous seront envoyés par email la
+                    veille de votre prise en charge de manière automatique.
+                </p>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" src="{{ asset('view/images/volkswagen.png') }}"
+                     alt="Generic placeholder image">
+            </div>
+        </div>
+
+        <hr class="separator-lg">
+
+        <div class="row featurette">
+            <div class="col-md-7 order-md-2 align-self-center">
+                <h2 class="featurette-heading">Forfaits Aéroports. <span class="text-muted">See for yourself.</span>
+                </h2>
+                <p class="lead">
+                    Votre chauffeur VTC vous assure vos transferts de Paris vers l’aéroport de Roissy CDG dès 49.90
+                    €.<br/>
+                    Réservation facile. Transfert aéroport moins cher qu'un taxi! Prix fixe, 4 passagers et bagages
+                    inclus. Si vous arrivez à l'aéroport de Roissy CDG, votre chauffeur vous récupère au point de rdv et
+                    s'occupe de vos sacs et bagages. N'attendez plus et réservez votre chauffeur privé pour vos
+                    transferts Paris – Roissy Charles de Gaulle
+                </p>
+            </div>
+            <div class="col-md-5 order-md-1">
+                <img class="img-fluid mx-auto" src="{{ asset('view/images/terminal.jpg') }}"
+                     alt="Generic placeholder image">
+            </div>
+        </div>
+
+        <hr class="separator-lg">
+
+        <div class="row featurette">
+            <div class="col-md-7 align-self-center">
+                <h2 class="featurette-heading">Le Prix est fixe. <span class="text-muted">20% moins cher.</span></h2>
+                <p class="lead">
+                    Retrouvez les prix de votre chauffeur VTC en berline classe eco ainsi que les préstations fournis
+                    par notre société. Réservez un chauffeur privé en berline à prix fixe et sans surprise pour vos
+                    transferts depuis et vers l' aéroports Roissy Charles de Gaulle (CDG), d' Orly, et de Beauvais grâce
+                    à a réservation en ligne de manière totalement sécurisée. Commandez votre chauffeur 12/24h à
+                    l'avance. Plus de stress, vous arrivez à l’heure à l’aéroport ou à votre destination de choix.
+                </p>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" src="{{ asset('view/images/card-bank.jpg') }}"
+                     alt="Generic placeholder image">
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ param('_keyGoogle') }}"></script>
-    <script src="{{ asset('js/jquery.placepicker.min.js') }}"></script>
-    <script src="{{ asset('js/picker.js') }}"></script>
-    <script src="{{ asset('js/parsley.min.js') }}"></script>
-    <script type="text/javascript">
-
-        $('#devis').parsley();
-        $(".placepicker").placepicker({});
-
-
-        $('#datepicker').pickadate({
+    <script src="{{ asset('vendor/amsul/pickadate/lib/compressed/picker.js') }}"></script>
+    <script src="{{ asset('vendor/amsul/pickadate/lib/compressed/picker.date.js') }}"></script>
+    <script src="{{ asset('vendor/amsul/pickadate/lib/compressed/picker.time.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-validation/jquery-validation/src/core.js') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ config('key_google') }}"></script>
+    <script src="{{ asset('view/js/autoCompletion.js') }}"></script>
+    <script>
+        $('[data-type="form-validation"]').validate({
+            rules: {
+                depart: {
+                    required: true,
+                    minlength: 5
+                },
+                arrivee: {
+                    required: true,
+                    minlength: 5
+                }
+            }
+        });
+        $('[data-type="datepicker"]').pickadate({
             monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
             weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
             today: 'aujourd\'hui',
@@ -152,37 +125,11 @@
             min: +1,
             {% endif %}
             formatSubmit: 'dd/mm/yyyy'
-        })
-        $('#timepicker').pickatime({
-            // Escape any “rule” characters with an exclamation mark (!).
+        });
+        $('[data-type="timepicker"]').pickatime({
             format: 'HH:i',
             formatLabel: 'HH:i',
             formatSubmit: 'HH:i'
         })
-        $(document).ready(function () {
-            $('#devis').on('submit', function (e) {
-                e.preventDefault();
-                $('#load-booking').show();
-
-                var $this = $(this);
-                if ($('#devis').parsley().isValid()) {
-                    $.ajax({
-                        url: $this.attr('action'),
-                        type: $this.attr('method'),
-                        data: $this.serialize(),
-                        success: function (data) {
-                            var data = JSON.parse(data);
-                            $('#message-booking').empty();
-                            $('#message-booking').load('{{ asset('html/quotation.php') }}', data);
-                        },
-                        error: function () {
-                            $('#message-booking').empty();
-                            $('#message-booking').html('<p><span class="w3-tag w3-xlarge w3-pale-yellow">une erreur est survenue, veuillez réessayer.</span></p>');
-                        },
-                    });
-                }
-            });
-        });
-
     </script>
 {% endblock %}

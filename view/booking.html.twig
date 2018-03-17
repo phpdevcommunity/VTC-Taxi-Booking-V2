@@ -1,197 +1,155 @@
 {% extends 'base.html.twig' %}
-{% block body %}
-    <div class="bgimgr-1 w3-opacity w3-display-container" id="home">
-        <div class="w3-display-middle">
-    <span class="w3-center w3-padding-xlarge w3-black w3-xlarge w3-wide w3-animate-opacity">
-        RESERVATION
-    </span>
-        </div>
-    </div>
-    <section id="reser">
-        <div class="w3-content w3-container w3-padding-64" id="about" style="max-width:1200px">
-            <h2 class="w3-center w3-xxlarge w3-text-dark-grey">RÉCAPITULATIF DE LA RESERVATION</h2>
-            {% if session.id_em is defined %}
-                <div class="w3-panel w3-card-2 w3-pale-green w3-leftbar w3-rightbar w3-border-green">
-                    <p><a href="<?= MySettings::$_prefixSite ?>admin/" class="w3-bar-item w3-button w3-padding">Vous
-                            êtes connecté en tant qu'Administrateur.</a><br/>
-                        <a href="<?= MySettings::$_prefixSite ?>deconnexion/" class="w3-bar-item w3-button w3-padding">Déconnexion</a>
-                    </p>
-                </div>
-            {% endif %}
-            <div class="w3-row w3-padding-32 w3-section">
-                <div class="w3-col m8 w3-container w3-section">
-                    <div class="w3-container w3-card-2 w3-li-grey w3-text-dark-grey">
-                        <form method="post" id="payment-form" action="" enctype="multipart/form-data" name="booking"
-                              novalidate>
-                            <h2 class="w3-center">RÉSERVATION EN LIGNE</h2>
-                            <p class="w3-center">Veuillez compléter les informations ci-dessous afin de finaliser votre
-                                réservation <br/>ou appelez nous au <b>{{ param('_phone') }}</b></p>
-                            <noscript>
-                                <div class="w3-panel w3-card-2 w3-pale-red w3-leftbar w3-rightbar w3-border-red">
-                                    <p>JavaScript est désactivé dans votre navigateur.<br/>
-                                        Veuillez activer JavaScript dans votre navigateur ou installer un navigateur
-                                        avec JavaScript pour pouvoir effectuer votre réservation sur ce site.</p>
-                                </div>
-                            </noscript>
 
-                            <?php require_once 'reponse.php' ;?>
+{% block content %}
+    <div class="container mt-5 mb-5">
 
-                            <div class="w3-row w3-section">
-                                <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
-                                <div class="w3-rest">
-                                    <input class="w3-input w3-border" name="nom" required=""
-                                           data-parsley-length="[3, 20]" type="text" placeholder="Nom">
-                                </div>
-                            </div>
-
-                            <div class="w3-row w3-section">
-                                <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
-                                <div class="w3-rest">
-                                    <input class="w3-input w3-border" name="prenom" required=""
-                                           data-parsley-length="[3, 20]" type="text" placeholder="Prénom">
-                                </div>
-                            </div>
-
-                            <div class="w3-row w3-section">
-                                <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
-                                <div class="w3-rest">
-                                    <input class="w3-input w3-border" data-parsley-type="email" required="" name="email"
-                                           type="text" placeholder="Email">
-                                </div>
-                            </div>
-
-                            <div class="w3-row w3-section">
-                                <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-phone"></i></div>
-                                <div class="w3-rest">
-                                    <input class="w3-input w3-border" name="telephone" type="tel" required=""
-                                           data-parsley-type="digits" placeholder="Numéro de téléphone">
-                                </div>
-                            </div>
-                            <div class="w3-row-padding">
-                                <div class="w3-half">
-                                    <label>Passagers</label>
-                                    <input class="w3-input w3-border" id="passenger" name="passagers" required=""
-                                           data-parsley-type="digits" min="1" max="8" value="1" type="number">
-                                </div>
-                                <div class="w3-half">
-                                    <label>Numéro de vol (si nécéssaire)</label>
-                                    <input class="w3-input w3-border" type="text" name="volNumber"
-                                           placeholder="AF 3321">
-                                </div>
-                            </div>
-                            <div class="w3-row w3-section">
-                                <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-pencil"></i></div>
-                                <div class="w3-rest">
-                                    <input class="w3-input w3-border" name="note" type="text"
-                                           placeholder="Note pour le chauffeur">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="w3-panel w3-pale-green w3-bottombar w3-border-green w3-border w3-large">
-                                <p>Prix : {{ booking.PRIX }} € TTC</p>
-                            </div>
-                            <hr>
-                            <h3>Mode de paiement</h3>
-                            <div class="w3-row-padding paiement w3-margin-bottom">
-                                <div class="w3-half">
-                                    <p><input class="w3-radio" type="radio" name="typePaiement" value="1" checked><label
-                                                class="w3-validate w3-large"> Paiment à bord</label><img
-                                                src="{{ asset('images/cash.png') }}"></p>
-                                </div>
-                                <div class="w3-half">
-                                    <p><input class="w3-radio" type="radio" name="typePaiement" value="2"><label
-                                                class="w3-validate w3-large"> Carte bancaire</label><img
-                                                src="{{ asset('images/cb.png') }}"></p>
-                                </div>
-                            </div>
-                            <hr>
-                            {% include 'cb.html.twig' %}
-                            <p class="w3-small">En validant la réservation, vous acceptez les <a
-                                        href="<?= MySettings::$_prefixSite ?>cgv/" target="_blank">Conditions Générales
-                                    De Ventes</a>.</p>
-                            <p id="loading" style="margin:8px 0px; display:none;" class="w3-center"><img
-                                        src="{{ asset('images/ajax-loader.gif') }}" alt="Chargement..."/></p>
-                            <button name="reservd" class="w3-btn w3-green w3-padding-large w3-section" type="submit">
-                                VALIDER LA RESERVATION
-                            </button>
-                        </form>
-                        <p>Les transactions effectuées sur <?= MySettings::$_link ?> sont 100% sécurisées par le système
-                            de paiement de notre partenaire : https://stripe.com/fr.<br/>Toutes les informations
-                            échangées pour traiter le paiement sont cryptées grâce au protocole SSL.</p>
+        <div class="row">
+            <div class="col-md-4 order-md-2 mb-4">
+                {% include 'information.html.twig' %}
+                <div id="mapsDevis"></div>
+                <p class="text-center"><b>*ITINERAIRE INDICATIF </b></p>
+            </div>
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Informations</h4>
+                {{ form.start|raw }}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">Prénom</label>
+                            {{ form.elements.firstName|raw }}
+                            {{ form.error('firstName')|raw }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Nom</label>
+                            {{ form.elements.lastName|raw }}
+                            {{ form.error('lastName')|raw }}
+                        </div>
                     </div>
-                </div>
-                <div class="w3-col m4 w3-container w3-section">
-                    <div class="w3-container w3-card-2 w3-li-gre w3-margin-bottom w3-text-dark-grey w3-li-grey">
-                        {% include 'infoBooking.html.twig' %}
+
+                    <div class="mb-3">
+                        <label for="username">E-mail</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@</span>
+                            </div>
+                            {{ form.elements.mail|raw }}
+                        </div>
+                        {{ form.error('mail')|raw }}
                     </div>
-                    <div class="w3-card-2 w3-li-gre">
-                        <div id="mapsDevis"></div>
-                        <p class="w3-center"><b>*ITINERAIRE INDICATIF </b></p>
+
+                    <div class="mb-3">
+                        <label for="phone">Téléphone</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><span class="fa fa-mobile"></span></span>
+                            </div>
+                            {{ form.elements.phone|raw }}
+                        </div>
+                        {{ form.error('phone')|raw }}
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="passengers">Passagers</label>
+                            {{ form.elements.passengers|raw }}
+                            {{ form.error('passengers')|raw }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="vol">Numéro de vol (si nécéssaire)</label>
+                            {{ form.elements.vol|raw }}
+                            {{ form.error('vol')|raw }}
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <h4 class="mb-3">Paiement</h4>
+                    <p class="payment-errors alert alert-warning" style="display:none;"></p>
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            {{ form.elements.methodPayment.radio(0)|raw }}
+
+                            <label class="custom-control-label" for="money">Paiement à bord</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            {{ form.elements.methodPayment.radio(1)|raw }}
+                            <label class="custom-control-label" for="credit">Carte bancaire</label>
+                        </div>
+                    </div>
+                    <div id="Payment-card" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="cc-number">Credit card number</label>
+                                <input type="tel" class="form-control" id="cc-number" placeholder="" data-stripe="number">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-mm">Expiration</label>
+                                <input type="text" class="form-control" id="cc-mm" placeholder="" data-stripe="exp_month" maxlength="2">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-yy">&nbsp;</label>
+                                <input type="text" class="form-control" id="cc-yy" placeholder="" data-stripe="exp_year" maxlength="2">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="cc-cvc">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvc" placeholder="" data-stripe="cvc" maxlength="4" >
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-success btn-lg btn-block submit" type="submit">Continue ({{ reservation.price }}€)</button>
+                {{ form.end|raw }}
             </div>
         </div>
-    </section>
+    </div>
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('vendor/jquery-validation/jquery-validation/src/core.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ param('_keyGoogle') }}"></script>
-    <script src="{{ asset('js/parsley.min.js') }}"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    <script type="text/javascript">
-        $('#payment-form').parsley();
+    <script>
         $(document).ready(function () {
-            $("input[name='typePaiement']").change(function (e) {
-                if (this.value == '1') {
-                    $('#cc-number').prop('required', false);
-                    $('#cc-mm').prop('required', false);
-                    $('#cc-yy').prop('required', false);
-                    $('#cc-cvc').prop('required', false);
-                    $('#Payment-card').hide('slow');
+
+            $("input[name='methodPayment']").change(function () {
+                $target = $('#Payment-card');
+                if (this.value === '1') {
+                    $('#cc-number, #cc-mm, #cc-yy,#cc-cvc').prop('required', false);
+                    $target.hide('slow');
                 }
-                else if (this.value == '2') {
-                    $('#cc-number').prop('required', true);
-                    $('#cc-mm').prop('required', true);
-                    $('#cc-yy').prop('required', true);
-                    $('#cc-cvc').prop('required', true);
-                    $('#Payment-card').show('slow');
+                else if (this.value === '2') {
+                    $('#cc-number, #cc-mm, #cc-yy,#cc-cvc').prop('required', true);
+                    $target.show('slow');
                 }
             });
-        });
-        Stripe.setPublishableKey('{{ param('_pkey_stripe') }}');
-        $(function () {
+            Stripe.setPublishableKey('{{ param('_pkey_stripe') }}');
             var $form = $('#payment-form');
-            $form.submit(function (event) {
-                $('#loading').show();
-
-                if ($("input[type=radio][name=typePaiement]:checked").attr('value') == '1') {
+            $(function () {
+                $form.validate({
+                    submitHandler: function(form) {
+                        if ($("input[type=radio][name=typePaiement]:checked").attr('value') === '1') {
+                            form.get(0).submit();
+                        }
+                        else {
+                            form.find('.submit').prop('disabled', true);
+                            Stripe.card.createToken($form, stripeResponseHandler);
+                            return false;
+                        }
+                    }
+                });
+            });
+            function stripeResponseHandler(status, response) {
+                if (response.error) { // Problem!
+                    $('.payment-errors').show('slow');
+                    $form.find('.payment-errors').text(response.error.message);
+                    $form.find('.submit').prop('disabled', false);
+                } else {
+                    var token = response.id;
+                    $form.append($('<input type="hidden" name="stripeToken">').val(token));
                     $form.get(0).submit();
                 }
-                else {
-
-                    $form.find('.submit').prop('disabled', true);
-                    Stripe.card.createToken($form, stripeResponseHandler);
-                    return false;
-                }
-            });
-        });
-        function stripeResponseHandler(status, response) {
-            var $form = $('#payment-form');
-            console.log(response);
-            if (response.error) { // Problem!
-
-                $('#loading').hide();
-                $('#stripe-error').show('slow');
-                $form.find('.payment-errors').text(response.error.message);
-                $form.find('.submit').prop('disabled', false); // Re-enable submission
-
-            } else {
-
-                var token = response.id;
-                $form.append($('<input type="hidden" name="stripeToken">').val(token));
-                $form.get(0).submit();
             }
-        }
-        function initMap(){var point_a={lat:{{booking.AD_LAT}},lng:{{booking.AD_LNG}}};var point_b={lat:{{booking.AA_LAT}},lng:{{booking.AA_LNG}}};var map=new google.maps.Map(document.getElementById('mapsDevis'),{center:point_a,scrollwheel:false,zoom:7});var directionsDisplay=new google.maps.DirectionsRenderer({map:map});var request={destination:point_b,origin:point_a,travelMode:google.maps.TravelMode.DRIVING};var directionsService=new google.maps.DirectionsService();directionsService.route(request,function(response,status){if(status==google.maps.DirectionsStatus.OK){directionsDisplay.setDirections(response)}})}google.maps.event.addDomListener(window,'load',initMap);
+        });
+        {#function initMap(){var point_a={lat:{{booking.AD_LAT}},lng:{{booking.AD_LNG}}};var point_b={lat:{{booking.AA_LAT}},lng:{{booking.AA_LNG}}};var map=new google.maps.Map(document.getElementById('mapsDevis'),{center:point_a,scrollwheel:false,zoom:7});var directionsDisplay=new google.maps.DirectionsRenderer({map:map});var request={destination:point_b,origin:point_a,travelMode:google.maps.TravelMode.DRIVING};var directionsService=new google.maps.DirectionsService();directionsService.route(request,function(response,status){if(status==google.maps.DirectionsStatus.OK){directionsDisplay.setDirections(response)}})}google.maps.event.addDomListener(window,'load',initMap);#}
     </script>
 {% endblock %}

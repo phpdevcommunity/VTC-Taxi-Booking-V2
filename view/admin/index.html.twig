@@ -1,87 +1,104 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block body %}
 
-    <!-- Overlay effect when opening sidebar on small screens -->
-    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-    <!-- !PAGE CONTENT! -->
-    <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
-        <!-- Header -->
-        <header class="w3-container" style="padding-top:22px">
-            <h5><b><i class="fa fa-dashboard"></i> Mon Tableau de Bord</b></h5>
-        </header>
-
-        <div class="w3-row-padding w3-margin-bottom">
-            <div class="w3-quarter">
-                <div class="w3-container w3-red w3-padding-16">
-                    <div class="w3-left"><i class="fa fa-car w3-xxxlarge"></i></div>
-                    <div class="w3-right">
-                        <h3>{{ param('_reservations')['1days']['total'] }}</h3>
-                    </div>
-                    <div class="w3-clear"></div>
-                    <h4>Demain</h4>
-                </div>
-            </div>
-            <div class="w3-quarter">
-                <div class="w3-container w3-blue w3-padding-16">
-                    <div class="w3-left"><i class="fa fa-car w3-xxxlarge"></i></div>
-                    <div class="w3-right">
-                        <h3>{{ param('_reservations')['2days']['total'] }}</h3>
-                    </div>
-                    <div class="w3-clear"></div>
-                    <h4>Après Demain</h4>
-                </div>
-            </div>
-            <div class="w3-quarter">
-                <div class="w3-container w3-teal w3-padding-16">
-                    <div class="w3-left"><i class="fa fa-file-text-o w3-xxxlarge"></i></div>
-                    <div class="w3-right">
-                        <h3>{{ param('_reservations')['all']['total'] }}</h3>
-                    </div>
-                    <div class="w3-clear"></div>
-                    <h4>Réservations</h4>
-                </div>
-            </div>
-            <div class="w3-quarter">
-                <div class="w3-container w3-orange w3-text-white w3-padding-16">
-                    <div class="w3-left"><i class="fa fa-eur w3-xxxlarge"></i></div>
-                    <div class="w3-right">
-                        <h3>{{ param('_reservations')['prix']['total'] }} €</h3>
-                    </div>
-                    <div class="w3-clear"></div>
-                    <h4>Total</h4>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="w3-panel">
-            <div class="w3-row-padding" style="margin:0 -16px">
-                <div class="w3-container">
-                    <h5>Réservations</h5>
-                    <table class="w3-table w3-striped w3-white">
-                        {% for reservation in reservations %}
-                        <tr>
-                            <td><i class="fa fa-bookmark w3-text-blue w3-large"></i></td>
-                            <td><a href="{{ route('admin/bon/'~reservation.id) }}" target="_blank">{{ reservation.reference }}</a></td>
-                            <td>{{ reservation.date_course|date('d/m/Y') }} à {{ reservation.heure_course }}</td>
-                            <td>{{ reservation.nom }} {{ reservation.prenom }}</td>
-                            <td><i>{{ reservation.prix }} €</i></td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                    <div class="w3-center w3-margin">
-                        <div class="w3-bar w3-border">
-                            {% for i in 1..pages %}
-                            <a href="#" class="w3-bar-item w3-button">{{ i }}</a>
-                            {% endfor %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'admin/menu.html.twig' %}
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <div class="d-flex flex-column justify-content-between pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard</h1>
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card text-white bg-danger mb-3">
+                                <div class="card-header">Demain</div>
+                                <div class="card-body">
+                                    {{ count.tomorrow }}
+                                </div>
+                            </div>
                         </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card text-white bg-warning mb-3">
+                                <div class="card-header">Après-demain</div>
+                                <div class="card-body">
+                                    {{ count.afterTomorrow }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card text-white bg-primary mb-3">
+                                <div class="card-header">Réservations</div>
+                                <div class="card-body">
+                                    {{ count.all }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="card text-white bg-success mb-3">
+                                <div class="card-header">Total</div>
+                                <div class="card-body">
+                                    {{ count.price }} €
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <h2>Liste des réservations</h2>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="reservations" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Référence</th>
+                                    <th>Client</th>
+                                    <th>Départ</th>
+                                    <th>Arrivée</th>
+                                    <th>Date du transfert</th>
+                                    <th>Heure du transfert</th>
+                                    <th>Prix</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
         </div>
-        <hr>
-        {% include 'admin/footer.html.twig' %}
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('vendor/datatables/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/datatables/datatables/media/js/dataTables.bootstrap4.js') }}"></script>
+    <script>
+        $(function () {
+            $('#reservations').DataTable({
+                "language": {
+                    "url": "{{ asset('view/json/French.json') }}"
+                },
+                "ajax": "{{ route('admin/reservations/data') }}",
+                "columns": [
+                    {"data": "reference",
+                        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            var url = '{{ route("admin/bon/reservation_id") }}';
+                            url = url.replace("reservation_id", oData.reference);
+                            $(nTd).html("<a target=\"_blank\" href="+ url +">"+oData.reference+"</a>");
+                        }
+                    },
+                    {"data": "client"},
+                    {"data": "depart"},
+                    {"data": "arrival"},
+                    {"data": "dateTransfer"},
+                    {"data": "timeTransfer"},
+                    {"data": "price"}
+                ],
+                "order": [[ 3, 'desc' ]]
+            });
+        });
+    </script>
 {% endblock %}
