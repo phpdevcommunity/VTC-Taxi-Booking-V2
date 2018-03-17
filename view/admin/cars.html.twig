@@ -1,0 +1,84 @@
+{% extends 'admin/base.html.twig' %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'admin/menu.html.twig' %}
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <h2>Liste des véhicules</h2>
+                {{ flash.get('success')|raw }}
+                {{ flash.get('error')|raw }}
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-end mt-2 mb-2">
+                        <a href="{{ route('admin/car/add') }}" class="btn btn-success">Ajouter un nouveau véhicule</a>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="cars" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Type</th>
+                                    <th>Prix au km</th>
+                                    <th>Prix à la minute</th>
+                                    <th>Tarif minimum</th>
+                                    <th>Majoration(%)</th>
+                                    <th>Places</th>
+                                    <th>Bagages</th>
+                                    <th>Activé</th>
+                                    <th>Image</th>
+                                    <th>Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript"
+            src="{{ asset('vendor/datatables/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('vendor/datatables/datatables/media/js/dataTables.bootstrap4.js') }}"></script>
+    <script>
+        $(function () {
+            $('#cars').DataTable({
+                "language": {
+                    "url": "{{ asset('view/json/French.json') }}"
+                },
+                "ajax": "{{ route('admin/cars/data') }}",
+                "columns": [
+                    {"data": "id"},
+                    {"data": "type"},
+                    {"data": "kmPrice"},
+                    {"data": "minutePrice"},
+                    {"data": "minimumPrice"},
+                    {"data": "increase"},
+                    {"data": "places"},
+                    {"data": "bags"},
+                    {"data": "active"},
+                    {"data": "image"},
+                    {
+                        "data": null,
+                        "defaultContent": '<button class="btn btn-primary">Edit</button>',
+                        "render": function ( data, type, full) {
+                            var url = '{{ route("admin/car/edit/car_id") }}';
+                            url = url.replace("car_id", full.id);
+                            return '<a href="'+ url +'" class="btn btn-primary">Editer</a>';
+                        }
+                    }
+                ],
+                "order": [[0, 'asc']]
+            });
+        });
+    </script>
+{% endblock %}

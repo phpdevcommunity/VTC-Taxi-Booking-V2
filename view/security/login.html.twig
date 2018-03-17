@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+
+{% block stylesheet %}
+    <link href="{{ asset('view/css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+
+    {{ form.start|raw }}
+        <h1 class="h3 mb-3 font-weight-normal">Identifiez vous</h1>
+        <label for="username" class="sr-only">Email address</label>
+        {{ form.elements.mail|raw }}
+        <label for="password" class="sr-only">Password</label>
+        {{ form.elements.password|raw }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    {{ form.end|raw }}
+
+</div>
+{% endblock %}

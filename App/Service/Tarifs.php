@@ -2,31 +2,55 @@
 
 namespace App\Service;
 
-use App\Model\Cars;
+use App\Model\Address;
+use App\Model\Car;
+use App\Model\Reservation;
 
-
+/**
+ * Class Tarifs
+ * @package App\Service
+ */
 Class Tarifs
 {
 
-    private $_tarif_km;
-    private $_tarif_time;
-    private $_tarif_minimum;
 
-    private $_prix;
+    private $prix;
 
-    public function __construct(Cars $car)
+    /**
+     * @var Car
+     */
+    private $car;
+
+    /**
+     * @var Reservation
+     */
+    private $reservation;
+
+
+    /**
+     * Tarifs constructor.
+     * @param Car|null $car
+     * @param Reservation|null $reservation
+     * @param Forfait|null $package
+     */
+    public function __construct(
+        Reservation $reservation = null
+    )
     {
-        $this->_tarif_km = $car->getTarifKm();
-        $this->_tarif_time = $car->getTarifMinute();
-        $this->_tarif_minimum = $car->getTarifMinimum();
-
+        $this->reservation = $reservation;
+        $this->car = $this->reservation->getCar();
     }
 
-    public function priceCalculation($distance, $temps)
+    /**
+     * @param $distance
+     * @param $temps
+     * @return bool
+     */
+    public function calculation($distance, $temps)
     {
 
-        $distance = $distance * $this->_tarif_km;
-        $temps = $temps * $this->_tarif_time;
+        $distance = $distance * $this->car->getKmPrice();
+        $temps = $temps * $this->car->getMinutePrice();
         $price = ceil($distance + $temps);
 
         $this->setPrice($price);
@@ -34,34 +58,56 @@ Class Tarifs
 
     }
 
-    public function forfaitCalculation($city, $distance, $temps, $data_forfait, $typeCar)
+    /**
+     * @param Forfait $package
+     */
+    public function calculationByPackage(Forfait $package)
     {
+        /**
+         * @var Address $addressFrom
+         */
+        $addressFrom = $this->reservation->getDetailsAddressFrom();
+        /**
+         * @var Address $addressTo
+         */
+        $addressTo = $this->reservation->getDetailsAddressTo();
+        $typeCar = $this->reservation->getCarId();
 
-        if (isset($data_forfait['TARIF'][$typeCar])) {
+        $packageType = $package->getPackageType();
 
-            if (($city['from'] == $data_forfait['FROMORTO']) || ($city['to'] == $data_forfait['FROMORTO'])) {
-                $this->setPrice($data_forfait['TARIF'][$typeCar]);
+        if (isset($packageType['TARIF'][$typeCar])) {
+
+            if (
+                ($addressFrom->getCity() == $packageType['FROMORTO'])
+                || ($addressTo->getCity() == $packageType['FROMORTO'])
+            ) {
+                $this->setPrice($packageType['TARIF'][$typeCar]);
             } else {
-                $algo = $data_forfait['TARIF'][$typeCar] / $data_forfait['KM_MAX'];
-                $this->setPrice(ceil($distance * $algo));
+                $algo = $packageType['TARIF'][$typeCar] / $packageType['KM_MAX'];
+                $this->setPrice(ceil($this->reservation->getDistance() * $algo));
             }
+
         } else {
-            $this->priceCalculation($distance, $temps);
+
+            $this->calculation($this->reservation->getDistance(), $this->reservation->getHowLong());
         }
 
     }
 
-    private function setPrice($prix)
+    /**
+     * @param $price
+     */
+    private function setPrice($price)
     {
-
-        if ($prix < $this->_tarif_minimum) {
-            $prix = $this->_tarif_minimum;
-        }
-        $this->_prix = number_format($prix, 2);
+        $price = $price < $this->car->getMinimumPrice() ? $this->car->getMinimumPrice() : $price;
+        $this->prix = number_format($price, 2);
     }
 
     public function getPrice()
     {
-        return $this->_prix;
+        return $this->prix;
     }
+
+
+
 }

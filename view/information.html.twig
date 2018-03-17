@@ -1,0 +1,43 @@
+<h4 class="d-flex justify-content-between align-items-center mb-3">
+    <span class="text-muted">Votre réservation</span>
+</h4>
+<ul class="list-group mb-3">
+    <li class="list-group-item d-flex justify-content-between lh-condensed">
+        <div>
+            <h6 class="my-0"><span class="fa fa-map-marker fa-fw w3-margin-right w3-large"></span> Départ</h6>
+            <small class="text-muted">{{ reservation.depart }}</small>
+        </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+        <div>
+            <h6 class="my-0"><span class="fa fa-map-marker fa-fw w3-margin-right w3-large"></span> Arrivée</h6>
+            <small class="text-muted">{{ reservation.arrival }}</small>
+        </div></li>
+    <li class="list-group-item d-flex justify-content-between">
+        <div>
+            <h6 class="my-0"><span class="fa fa-calendar fa-fw w3-margin-right w3-large"></span> Date</h6>
+            <small class="text-muted">{{ reservation.dateTransfer|date('d/m/Y') }}</small>
+        </div></li>
+    <li class="list-group-item d-flex justify-content-between">
+        <div>
+            <h6 class="my-0"><span class="fa fa-clock-o fa-fw w3-margin-right w3-large"></span> Heure</h6>
+            <small class="text-muted">{{ reservation.timeTransfer|date('H:i') }}</small>
+        </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div>
+            <h6 class="my-0">Distance</h6>
+            <small class="text-muted">{{ reservation.distance }} km</small>
+        </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div>
+            <h6 class="my-0">Durée</h6>
+            <small class="text-muted">{{ reservation.howLong }} min</small>
+        </div>
+    </li>
+    <li class="text-success list-group-item d-flex justify-content-between">
+        <span>Total (EUR)</span>
+        <strong>{{ reservation.price }} € TTC</strong>
+    </li>
+</ul>
