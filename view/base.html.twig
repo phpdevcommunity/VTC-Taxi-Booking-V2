@@ -5,27 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{% block title %}{{ param('_society') }}{% endblock %}</title>
+    <title>{% block title %}{{ setting('society') }}{% endblock %}</title>
 
     <link href="{{ asset('vendor/twbs/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet">
     {% block stylesheet %}
-    <link href="{{ asset('view/css/front.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/components/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.date.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.time.css') }}" rel="stylesheet">
+      <link href="{{ asset('view/css/front.css') }}" rel="stylesheet">
+      <link href="{{ asset('vendor/components/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+      <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.css') }}" rel="stylesheet">
+      <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.date.css') }}" rel="stylesheet">
+      <link href="{{ asset('vendor/amsul/pickadate/lib/compressed/themes/classic.time.css') }}" rel="stylesheet">
     {% endblock %}
+
+    
 </head>
 <body>
 {% block header %}
 <header>
-    <div class="jumbotron-fluid bg {% if not home %}mini-bg{% endif %}">
+    <div class="jumbotron-fluid bg {% if home is not defined %}mini-bg{% endif %}">
         {% block nav %}
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand logo" href="#">
                 <img src="{{ asset('view/images/berline.png') }}" width="30" height="30"
                      class="d-inline-block align-top" alt="">
-                {{ param('society') }}
+                {{ setting('society') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +63,7 @@
     {% block footer %}
     <footer class="container">
         <p class="float-right"><a href="#">Back to top</a></p>
-        <p>&copy; {{ date('now')|date('Y') }} {{ param('_society') }} &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p>&copy; {{ date('now')|date('Y') }} {{ setting('society') }} &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
     </footer>
     {% endblock %}
 </main>

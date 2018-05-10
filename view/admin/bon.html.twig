@@ -52,7 +52,7 @@
                                                                 <td>
                                                                     <h5 class="aligncenter">SERVICE DE VOITURE DE
                                                                         TRANSPORT AVEC CHAUFFEUR</h5><br/>
-                                                                    <h5 class="aligncenter">{{ param('_society')|upper }}</h5>
+                                                                    <h5 class="aligncenter">{{ setting('society')|upper }}</h5>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -75,7 +75,7 @@
                                                                                        cellpadding="0" cellspacing="0">
                                                                                     <tr>
                                                                                         <td><h4>
-                                                                                                <b>{{ reservation.nom }} {{ reservation.prenom }}</b>
+                                                                                                <b>{{ reservation.lastName }} {{ reservation.firstName }}</b>
                                                                                             </h4></td>
                                                                                     </tr>
                                                                                     <tr>
@@ -85,23 +85,23 @@
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td><b>Téléphone
-                                                                                                : </b>{{ reservation.telephone }}
+                                                                                                : </b>{{ reservation.phone }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td><b>Nombre de passagers
-                                                                                                : </b>{{ reservation.passagers }}
+                                                                                                : </b>{{ reservation.passengers }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td><b>Réservation efféctuée le
-                                                                                                :</b> {{ reservation.date_heure_reserv|date('d/m/Y') }}
+                                                                                                :</b> {{ reservation.dateReservation|date('d/m/Y') }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td><b>Prise en charge
-                                                                                                :</b> {{ reservation.date_course|date('d/m/Y') }}
-                                                                                            à {{ reservation.heure_course }}
+                                                                                                :</b> {{ reservation.dateTransfer|date('d/m/Y') }}
+                                                                                            à {{ reservation.timeTransfer }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
@@ -111,18 +111,18 @@
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td><b>Destination
-                                                                                                :</b> {{ reservation.arrivee }}
+                                                                                                :</b> {{ reservation.arrival }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td><b>Véhicule
-                                                                                                : </b>{{ reservation.car_id }}
+                                                                                                : </b>{{ reservation.carId }}
                                                                                         </td>
                                                                                     </tr>
-                                                                                    {% if reservation.no_vol is not empty %}
+                                                                                    {% if reservation.vol is not empty %}
                                                                                     <tr>
                                                                                         <td><b>N° de
-                                                                                                Vol: </b>{{ reservation.no_vol }}
+                                                                                                Vol: </b>{{ reservation.vol }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     {% endif %}
@@ -135,9 +135,9 @@
                                                                                     {% endif %}
                                                                                     <tr class="total">
                                                                                         <td>TARIF
-                                                                                            : {{ reservation.prix }}
+                                                                                            : {{ reservation.price }}
                                                                                             € TTC
-                                                                                            ({{ reservation.method_paiement }})
+                                                                                            ({{ reservation.methodPayment }})
                                                                                         </td>
                                                                                     </tr>
                                                                                 </table>
@@ -148,8 +148,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td class="content-block aligncenter">
-                                                                    {{ param('_society') }},
-                                                                    {{ param('_adresse') }}
+                                                                    {{ setting('society') }},
+                                                                    {{ setting('address') }}
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -160,7 +160,7 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td class="aligncenter content-block">Des Questions? <a
-                                                                    href="mailto:">{{ param('_email') }}</a></td>
+                                                                    href="mailto:">{{ setting('email') }}</a></td>
                                                     </tr>
                                                 </table>
                                             </div>

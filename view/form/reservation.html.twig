@@ -1,13 +1,14 @@
-<div class="row reservation">
-    <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-6">
-        <div class="card m-5">
-            <div class="card-header">
-                Réservez votre chauffeur VTC en ligne
-            </div>
-            <div class="card-body">
-                {{ flash.get('success')|raw }}
-                {{ flash.get('error')|raw }}
-                {{ form.start|raw }}
+<div class="reservation container-fluid">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-6">
+            <div class="card m-5">
+                <div class="card-header">
+                    Réservez votre chauffeur VTC en ligne
+                </div>
+                <div class="card-body">
+                    {{ flash('success')|raw }}
+                    {{ flash('error')|raw }}
+                    {{ form.start|raw }}
                     {% if session.id_em is defined %}
                         <div class="col-md-12">
                             <p class="alert alert-info">
@@ -61,7 +62,8 @@
                     <div class="col-sm-12 text-right">
                         <button type="submit" class="btn btn-dark">ESTIMEZ LA COURSE</button>
                     </div>
-                {{ form.end|raw }}
+                    {{ form.end|raw }}
+                </div>
             </div>
         </div>
     </div>

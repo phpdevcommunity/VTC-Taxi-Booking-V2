@@ -6,14 +6,13 @@
             {% include 'admin/menu.html.twig' %}
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-
                 <h2>Mes paramètres</h2>
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
                             {{ form.start|raw }}
-                            {{ flash.get('success')|raw }}
-                            {{ flash.get('error')|raw }}
+                            {{ flash('success')|raw }}
+                            {{ flash('error')|raw }}
                             <div class="form-group">
                                 <label for="society">Société</label>
                                 {{ form.elements.society|raw }}
@@ -43,6 +42,11 @@
                                 <label for="address">Adresse de la société</label>
                                 {{ form.elements.address|raw }}
                                 {{ form.error('address')|raw }}
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Image page d'accueil</label>
+                                {{ form.elements.background|raw }}
+                                {{ form.error('background')|raw }}
                             </div>
                             <button class="btn btn-success btn-lg btn-block submit" type="submit">Enregistrer</button>
                             {{ form.end|raw }}
