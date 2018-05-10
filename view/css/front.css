@@ -5,10 +5,10 @@ header .bg-dark {
   border-radius: 0;
 }
 .bg {
-  background: url("../images/driver.jpg") no-repeat center center;
+  background: url("/public/images/background.jpg") no-repeat center center;
   background-size: cover;
   width: 100%;
-  height: 600px;
+  height: 700px;
 }
 .mini-bg {
   height: 300px !important;
@@ -54,5 +54,14 @@ footer {
 @media (max-width: 768px) {
   .bg {
     height: 700px;
+  }
+  .m-5 {
+    margin: 0.5rem !important;
+  }
+  .featurette h2 {
+    font-size: 2rem;
+  }
+  .featurette .lead {
+    font-size: 1rem;
   }
 }

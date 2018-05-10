@@ -5,7 +5,7 @@
   "type": "project",
   "autoload": {
     "psr-4": {
-      "App\\": "App"
+      "App\\": "app"
     }
   },
   "repositories": [
@@ -54,7 +54,7 @@
       "type": "package",
       "package": {
         "name": "FadymichelR/PHP-Database-Access",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "source": {
           "url": "https://github.com/FadymichelR/PHP-Database-Access.git",
           "type": "git",
@@ -64,6 +64,63 @@
           "psr-4": {
             "Fady\\": ""
           }
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "FadymichelR/Php-Routing",
+        "version": "1.0.0",
+        "source": {
+          "url": "https://github.com/FadymichelR/Php-Routing.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "psr-4": {
+            "Fady\\Routing\\": ""
+          }
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "fadymichel/dependency-injection",
+        "version": "1.0.0",
+        "source": {
+          "url": "https://github.com/FadymichelR/dependency-injection.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "psr-4": {
+            "Webbym\\DependencyInjection\\": ""
+          }
+        },
+        "require": {
+          "php": ">=7.1",
+          "psr/container": "^1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "webbym/templating",
+        "version": "1.0.0",
+        "source": {
+          "url": "https://github.com/FadymichelR/templating.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "psr-4": {
+            "Webbym\\": "src"
+          }
+        },
+        "require": {
         }
       }
     }
@@ -77,10 +134,15 @@
     "components/font-awesome": "^4.7",
     "amsul/pickadate": "4.0.0",
     "jquery-validation/jquery-validation": "1.17.0",
+    "FadymichelR/PHP-Database-Access": "1.0.2",
     "FadymichelR/Form-validation": "*",
-    "FadymichelR/PHP-Database-Access": "1.0.1",
     "datatables/datatables": "^1.10",
     "guzzlehttp/psr7": "^1.4",
-    "http-interop/response-sender": "^1.0"
+    "http-interop/response-sender": "^1.0",
+    "FadymichelR/Php-Routing": "1.0.0",
+    "fadymichel/dependency-injection": "1.0.0",
+    "filp/whoops": "^2.1",
+    "webbym/templating": "1.0.0",
+    "robmorgan/phinx": "^0.9.2"
   }
 }

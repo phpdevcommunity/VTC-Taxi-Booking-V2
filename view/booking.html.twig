@@ -106,7 +106,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('vendor/jquery-validation/jquery-validation/src/core.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ param('_keyGoogle') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ param('key.google') }}"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script>
         $(document).ready(function () {
@@ -122,7 +122,7 @@
                     $target.show('slow');
                 }
             });
-            Stripe.setPublishableKey('{{ param('_pkey_stripe') }}');
+            Stripe.setPublishableKey('{{ param('stripe.public_key') }}');
             var $form = $('#payment-form');
             $(function () {
                 $form.validate({

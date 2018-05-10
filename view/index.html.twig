@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center mt-5 mb-5">
+    <div class="container-fluid text-center mt-5 mb-5">
         <div class="row">
             <div class="col-lg-4">
                 <span class="fa fa-5x fa fa-lock"></span>
@@ -66,7 +66,7 @@
                 </p>
             </div>
             <div class="col-md-5 order-md-1">
-                <img class="img-fluid mx-auto" src="{{ asset('view/images/terminal.jpg') }}"
+                <img class="img-fluid mx-auto w-50" src="{{ asset('view/images/terminal.jpg') }}"
                      alt="Generic placeholder image">
             </div>
         </div>
@@ -85,7 +85,7 @@
                 </p>
             </div>
             <div class="col-md-5">
-                <img class="img-fluid mx-auto" src="{{ asset('view/images/card-bank.jpg') }}"
+                <img class="img-fluid mx-auto w-50" src="{{ asset('view/images/card-bank.jpg') }}"
                      alt="Generic placeholder image">
             </div>
         </div>
@@ -100,7 +100,7 @@
     <script src="{{ asset('vendor/amsul/pickadate/lib/compressed/picker.date.js') }}"></script>
     <script src="{{ asset('vendor/amsul/pickadate/lib/compressed/picker.time.js') }}"></script>
     <script src="{{ asset('vendor/jquery-validation/jquery-validation/src/core.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ config('key_google') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{ param('key.google') }}"></script>
     <script src="{{ asset('view/js/autoCompletion.js') }}"></script>
     <script>
         $('[data-type="form-validation"]').validate({
