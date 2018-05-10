@@ -86,7 +86,7 @@ class HomeController extends AppController
                     ) {
 
                         $token = $data['stripeToken'];
-                        $stripePayment = new StripePayment();
+                        $stripePayment = $this->get(StripePayment::class);
                         $statusPayment = $stripePayment->payment(
                             $token,
                             $reservation->getMail(),

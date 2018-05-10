@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fadymichel
- * Date: 06/11/17
- * Time: 20:20
- */
 
 namespace App\Controller;
 
@@ -16,11 +10,10 @@ use App\Session\SessionManager;
 use App\Twig\Extension\Asset;
 use App\Twig\Extension\Flash;
 use App\Twig\Extension\Parameters;
-use App\Twig\Extension\Route as Route_Extension;
+use App\Twig\Extension\Route;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig_Environment;
-use Twig_Loader_Filesystem;
 
 /**
  * Class AppController
@@ -49,22 +42,6 @@ abstract class AppController extends Controller
 
 
     /**
-     * AppController constructor.
-     */
-    public function __construct()
-    {
-
-
-        $this->twig = $this->get(Twig_Environment::class);
-        $this->twig->enableDebug();
-        $this->twig->addGlobal('session', $this->get(SessionManager::class));
-        $this->twig->addExtension($this->get(Parameters::class));
-        $this->twig->addExtension($this->get(Asset::class));
-        $this->twig->addExtension($this->get(Route_Extension::class));
-        $this->twig->addExtension($this->get(Flash::class));
-    }
-
-    /**
      * @param $view
      * @param array $array
      * @return Response
@@ -72,6 +49,9 @@ abstract class AppController extends Controller
      */
     protected function render($view, array $parameters = [])
     {
+        if (is_null($this->twig)) {
+            $this->buildTwig();
+        }
 
         return new Response(200, [], $this->twig->render($view, $parameters));
 
@@ -83,7 +63,9 @@ abstract class AppController extends Controller
      */
     protected function redirectTo($route)
     {
-        return (new Response())->withHeader('Location', $route);
+        $response = new Response();
+        $response->withHeader('Location', $route);
+        return $response;
     }
 
 
@@ -126,5 +108,19 @@ abstract class AppController extends Controller
         return $this->session;
     }
 
+
+    /**
+     * @return void
+     */
+    private function buildTwig() {
+
+        $this->twig = $this->get(Twig_Environment::class);
+        $this->twig->addGlobal('session', $this->get(SessionManager::class));
+        $this->twig->addExtension($this->get(Parameters::class));
+        $this->twig->addExtension($this->get(Asset::class));
+        $this->twig->addExtension($this->get(Route::class));
+        $this->twig->addExtension($this->get(Flash::class));
+
+    }
 
 }
